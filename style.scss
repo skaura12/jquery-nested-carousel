@@ -1,0 +1,40 @@
+.ns-horizontal-timeline {
+  div,ol,ul,li,span{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+  }
+
+  ol{
+    list-style: none;
+  }
+
+  .timeline {
+    .list-wrapper {
+      .list{
+        a{
+          position: absolute;
+          bottom: 0;
+          z-index: 2;
+          text-align: center;
+          padding-bottom: 15px;
+
+          &::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid green;
+            transform: translateX(-50%);
+            bottom: -5px;
+          }
+        }
+      }
+    }
+  }
+}

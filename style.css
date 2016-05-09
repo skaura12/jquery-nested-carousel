@@ -1,0 +1,27 @@
+.ns-horizontal-timeline div, .ns-horizontal-timeline ol, .ns-horizontal-timeline ul, .ns-horizontal-timeline li, .ns-horizontal-timeline span {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+.ns-horizontal-timeline ol {
+  list-style: none; }
+.ns-horizontal-timeline .timeline .list-wrapper .list a {
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  text-align: center;
+  padding-bottom: 15px; }
+  .ns-horizontal-timeline .timeline .list-wrapper .list a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid green;
+    transform: translateX(-50%);
+    bottom: -5px; }
+
+/*# sourceMappingURL=style.css.map */
