@@ -1,3 +1,9 @@
+@import "bourbon/bourbon";
+@import './partials/variables'; // colors, fonts etc...
+@import './partials/mixins'; // custom mixins
+@import './partials/layout'; // responsive grid and media queries
+
+
 .ns-horizontal-timeline {
   div,ol,ul,li,span{
     margin: 0;
@@ -8,16 +14,31 @@
     vertical-align: baseline;
   }
 
-  ol{
+  ol,ul{
     list-style: none;
   }
 
   .timeline {
+    position: relative;
+    height: 100px;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+
     .list-wrapper {
       .list{
+        white-space: nowrap;
+        overflow: hidden;
+        ol{
+          & > li{
+            display: inline-block;
+            text-align: center;
+            width: 200px;
+            height: 100px;
+            background-color: gray;
+          }
+        }
         a{
-          position: absolute;
-          bottom: 0;
           z-index: 2;
           text-align: center;
           padding-bottom: 15px;
@@ -33,6 +54,59 @@
             transform: translateX(-50%);
             bottom: -5px;
           }
+        }
+      }
+    }
+
+
+    .ns-timeline-navigation a {
+      /* these are the left/right arrows to navigate the timeline */
+      position: absolute;
+      z-index: 1;
+      @include center(y);
+      height: 34px;
+      width: 34px;
+      border-radius: 50%;
+      border: 2px solid darken($color-4, 10%);
+      /* replace text with an icon */
+      overflow: hidden;
+      color: transparent;
+      text-indent: 100%;
+      white-space: nowrap;
+      @include transition(border-color .3s);
+
+      &::after {
+        /* arrow icon */
+        content: '';
+        position: absolute;
+        height: 16px;
+        width: 16px;
+        @include center;
+        background: url(./img/cd-arrow.svg) no-repeat 0 0;
+      }
+
+      &.prev {
+        left: 0;
+        @include transform(translateY(-50%) rotate(180deg));
+      }
+
+      &.next {
+        right: 0;
+      }
+
+      &:hover {
+        border-color: $color-2;
+      }
+
+      &.inactive {
+        cursor: not-allowed;
+
+        &::after {
+          background-position: 0 -16px;
+        }
+
+        &:hover {
+          border-color: darken($color-4, 10%);
         }
       }
     }
