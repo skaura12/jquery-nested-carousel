@@ -29,30 +29,27 @@
       .list{
         white-space: nowrap;
         overflow: hidden;
+        margin: 0 40px;
         ol{
           & > li{
-            display: inline-block;
-            text-align: center;
-            width: 200px;
-            height: 100px;
-            background-color: gray;
-          }
-        }
-        a{
-          z-index: 2;
-          text-align: center;
-          padding-bottom: 15px;
 
-          &::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            border: 2px solid green;
-            transform: translateX(-50%);
-            bottom: -5px;
+            display: inline-block;
+            padding: 10px;
+            text-align: center;
+            & > ul > li {
+              display: inline-block;
+
+              & > a::after {
+                content: '';
+                border: 2px solid green;
+                border-radius: 50%;
+                height: 12px;
+                width: 12px;
+                display: inline-block;
+                background-color: green;
+                margin: 10px
+              }
+            }
           }
         }
       }

@@ -15,27 +15,23 @@
   margin: 0 auto; }
   .ns-horizontal-timeline .timeline .list-wrapper .list {
     white-space: nowrap;
-    overflow: hidden; }
+    overflow: hidden;
+    margin: 0 40px; }
     .ns-horizontal-timeline .timeline .list-wrapper .list ol > li {
       display: inline-block;
-      text-align: center;
-      width: 200px;
-      height: 100px;
-      background-color: gray; }
-    .ns-horizontal-timeline .timeline .list-wrapper .list a {
-      z-index: 2;
-      text-align: center;
-      padding-bottom: 15px; }
-      .ns-horizontal-timeline .timeline .list-wrapper .list a::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        border: 2px solid green;
-        transform: translateX(-50%);
-        bottom: -5px; }
+      padding: 10px;
+      text-align: center; }
+      .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li {
+        display: inline-block; }
+        .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li > a::after {
+          content: '';
+          border: 2px solid green;
+          border-radius: 50%;
+          height: 12px;
+          width: 12px;
+          display: inline-block;
+          background-color: green;
+          margin: 10px; }
   .ns-horizontal-timeline .timeline .ns-timeline-navigation a {
     /* these are the left/right arrows to navigate the timeline */
     position: absolute;
