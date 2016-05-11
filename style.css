@@ -9,6 +9,7 @@
   list-style: none; }
 .ns-horizontal-timeline .timeline {
   position: relative;
+  font-size: 20px;
   height: 100px;
   width: 90%;
   max-width: 800px;
@@ -19,8 +20,12 @@
     margin: 0 40px; }
     .ns-horizontal-timeline .timeline .list-wrapper .list ol > li {
       display: inline-block;
-      padding: 10px;
-      text-align: center; }
+      text-align: center;
+      position: relative;
+      height: 100px;
+      padding: 10px; }
+      .ns-horizontal-timeline .timeline .list-wrapper .list ol > li.selected {
+        background-color: #E2E2E2; }
       .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li {
         display: inline-block; }
         .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li > a::after {

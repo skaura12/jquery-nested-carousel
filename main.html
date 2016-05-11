@@ -4,11 +4,6 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="jquery-2.2.3.js"></script>
     <script src="main.js"></script>
-    <script>
-        (function ($) {
-
-        })(jQuery);
-    </script>
 </head>
 <section class="ns-horizontal-timeline">
     <div class="timeline">
@@ -16,7 +11,7 @@
             <div class="list">
                 <ol>
                     <li>
-                        Objective 1
+                        <span>Objective 1</span>
                         <ul>
                             <li>
                                 <a href="#0" class="active" data-content = "Activity 1.1"></a>
@@ -25,9 +20,9 @@
                                 <a href="#0" class="done" data-content = "Activity 1.2"></a>
                             </li>
                         </ul>
-                        <span>Activity 1.2</span>
+                        <span class="active">Activity 1.2</span>
                     </li>
-                    <li>
+                    <li class="selected">
                         Objective 2
                         <ul>
                             <li>
@@ -36,9 +31,26 @@
                             <li>
                                 <a href="#0" class="done" data-content = "Activity 2.2"></a>
                             </li>
+                            <li>
+                                <a href="#0" class="in-progress" data-content = "Activity 2.1"></a>
+                            </li>
+                            <li>
+                                <a href="#0" class="done" data-content = "Activity 2.2"></a>
+                            </li>
+                            <li>
+                                <a href="#0" class="in-progress" data-content = "Activity 2.1"></a>
+                            </li>
+                            <li>
+                                <a href="#0" class="done" data-content = "Activity 2.2"></a>
+                            </li>
+                            <li>
+                                <a href="#0" class="in-progress" data-content = "Activity 2.1"></a>
+                            </li>
+                            <li>
+                                <a href="#0" class="done" data-content = "Activity 2.2"></a>
+                            </li>
                         </ul>
-                        <span>Activity 1.2</span>
-
+                        <span class="active">Activity 1.2</span>
                     </li>
                     <li>
                         Objective 3
@@ -50,8 +62,7 @@
                                 <a href="#0" class="done" data-content = "Activity 3.2"></a>
                             </li>
                         </ul>
-                        <span>Activity 1.2</span>
-
+                        <span class="active">Activity 1.2</span>
                     </li>
                     <li>
                         Objective 4
@@ -63,7 +74,7 @@
                                 <a href="#0" class="done" data-content = "Activity 5.2"></a>
                             </li>
                         </ul>
-                        <span>Activity 1.2</span>
+                        <span class="active">Activity 1.2</span>
                     </li>
                     <li>
                         Objective 5
@@ -87,9 +98,32 @@
                                 <a href="#0" class="done" data-content = "Activity 2.2"></a>
                             </li>
                         </ul>
-                        <span>Activity 1.2</span>
+                        <span class="active">Activity 1.2</span>
                     </li>
-
+                    <li>
+                        Objective 6
+                        <ul>
+                            <li>
+                                <a href="#0" class="in-progress" data-content = "Activity 2.1"></a>
+                            </li>
+                            <li>
+                                <a href="#0" class="done" data-content = "Activity 2.2"></a>
+                            </li>
+                            <li>
+                                <a href="#0" class="in-progress" data-content = "Activity 2.1"></a>
+                            </li>
+                            <li>
+                                <a href="#0" class="done" data-content = "Activity 2.2"></a>
+                            </li>
+                            <li>
+                                <a href="#0" class="in-progress" data-content = "Activity 2.1"></a>
+                            </li>
+                            <li>
+                                <a href="#0" class="done" data-content = "Activity 2.2"></a>
+                            </li>
+                        </ul>
+                        <span class="active">Activity 1.2</span>
+                    </li>
                     <!-- other dates here -->
                 </ol>
 
@@ -107,4 +141,15 @@
     </div>
     <!-- .timeline -->
 </section>
+
+<section class="ns-horizontal-timeline">
+
+</section>
+
+<script>
+
+    (function ($) {
+        $(".ns-horizontal-timeline").nestedTimeline({});
+    })(jQuery);
+</script>
 </html>

@@ -20,6 +20,7 @@
 
   .timeline {
     position: relative;
+    font-size: 20px;
     height: 100px;
     width: 90%;
     max-width: 800px;
@@ -32,10 +33,14 @@
         margin: 0 40px;
         ol{
           & > li{
-
             display: inline-block;
-            padding: 10px;
             text-align: center;
+            position: relative;
+            height: 100px;
+            padding: 10px;
+            &.selected{
+              background-color: #E2E2E2;
+            }
             & > ul > li {
               display: inline-block;
 
