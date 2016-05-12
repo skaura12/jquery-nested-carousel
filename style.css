@@ -20,23 +20,33 @@
     margin: 0 40px; }
     .ns-horizontal-timeline .timeline .list-wrapper .list ol > li {
       display: inline-block;
+      vertical-align: top;
       text-align: center;
       position: relative;
       height: 100px;
+      box-sizing: border-box;
       padding: 10px; }
+      .ns-horizontal-timeline .timeline .list-wrapper .list ol > li:not(.selected) {
+        pointer-events: none;
+        opacity: 0.4; }
       .ns-horizontal-timeline .timeline .list-wrapper .list ol > li.selected {
         background-color: #E2E2E2; }
       .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li {
         display: inline-block; }
         .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li > a::after {
           content: '';
-          border: 2px solid green;
+          border: 2px solid gray;
           border-radius: 50%;
           height: 12px;
           width: 12px;
           display: inline-block;
-          background-color: green;
           margin: 10px; }
+        .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li > a.done::after {
+          background-color: #000000; }
+        .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li > a.in-progress::after {
+          background-color: white; }
+        .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li > a.selected::after {
+          background-color: green; }
   .ns-horizontal-timeline .timeline .ns-timeline-navigation a {
     /* these are the left/right arrows to navigate the timeline */
     position: absolute;

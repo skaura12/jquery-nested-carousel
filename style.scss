@@ -34,25 +34,41 @@
         ol{
           & > li{
             display: inline-block;
+            vertical-align: top;
             text-align: center;
             position: relative;
             height: 100px;
+            box-sizing: border-box;
             padding: 10px;
+
+            &:not(.selected) {
+              pointer-events: none;
+              opacity: 0.4;
+            }
             &.selected{
               background-color: #E2E2E2;
             }
             & > ul > li {
               display: inline-block;
-
-              & > a::after {
-                content: '';
-                border: 2px solid green;
-                border-radius: 50%;
-                height: 12px;
-                width: 12px;
-                display: inline-block;
-                background-color: green;
-                margin: 10px
+              & > a {
+                &::after {
+                  content: '';
+                  border: 2px solid gray;
+                  border-radius: 50%;
+                  height: 12px;
+                  width: 12px;
+                  display: inline-block;
+                  margin: 10px;
+                }
+                &.done::after{
+                  background-color: #000000;
+                }
+                &.in-progress::after{
+                  background-color: white;
+                }
+                &.selected::after {
+                  background-color: green;
+                }
               }
             }
           }
