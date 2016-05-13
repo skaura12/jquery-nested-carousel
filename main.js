@@ -20,7 +20,6 @@
         } else {
             currentTranslateValue = 0;
         }
-
         return currentTranslateValue;
     }
 
@@ -34,21 +33,20 @@
 
     Plugin.prototype = {
         init: function(){
-            var timelineComponents = {},
-                selectedOuterNode = this.$ele.find(".list > ol > li.selected"),
+            var selectedOuterNode = this.$ele.find(".list > ol > li.selected"),
                 selectedInnerNode;
 
-            timelineComponents["outerNodeList"] = this.$ele.find(".list > ol >li");
+            this.outerNodeList = this.$ele.find(".list > ol >li");
 
             if(!selectedOuterNode.length){
-                selectedOuterNode = $(timelineComponents["outerNodeList"][0]);
+                selectedOuterNode = $(this.outerNodeList[0]);
             }
 
             selectedInnerNode = selectedOuterNode.find("a.selected");
             if(!selectedInnerNode.length){
                 selectedInnerNode = $(selectedOuterNode.find("a")[0]);
             }
-            resetListItems(timelineComponents["outerNodeList"]);
+            resetListItems(this.outerNodeList);
 
             selectedOuterNode.addClass("selected");
             selectedInnerNode.addClass("selected");
