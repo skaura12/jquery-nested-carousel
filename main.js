@@ -4,7 +4,8 @@
     function Plugin(element,options){
         this.$ele = element;
         this.options = $.extend({}, $.fn[pluginName].defaults,options);
-        this.init();
+        this.buildTemplate();
+        //this.init();
     }
 
     function getTranslateValue(obj){
@@ -33,9 +34,10 @@
 
     Plugin.prototype = {
         init: function(){
-            var selectedOuterNode = this.$ele.find(".list > ol > li.selected"),
-                selectedInnerNode,
-                self = this;
+            var self = this,
+                selectedOuterNode = this.$ele.find(".list > ol > li.selected"),
+                selectedInnerNode;
+
 
             self.outerNodeList = self.$ele.find(".list > ol >li");
 
@@ -58,6 +60,29 @@
             });
             self.containerWidth = self.$ele.find(".list ol").width();
             self.attachEvents();
+        },
+        buildTemplate: function(){
+            var self = this,
+                template = $("<section class='ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'></div></div></section>"),
+                outerList = $("<ol></ol>");
+
+            self.options.data.forEach(function(outerNode){
+                var innerList = $("<ul></ul>");
+                outerNode.list.forEach(function(innerNode){
+                    var anchorNode = $("<a href='#0'></a>");
+                    anchorNode.addClass(self.options.states[innerNode.state].name).data('name',innerNode.name);
+                    if(innerNode.selected){
+                        anchorNode.addClass("selected");
+                    }
+                    $("<li class="+ ((outerNode.selected)?'selected':'') +" ></li>").append(anchorNode).appendTo(innerList);
+                });
+                $("<li></li>").append(innerList).appendTo(outerList);
+            });
+
+            template.find(".list").append(outerList);
+            //append navigation buttons
+            template.append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev'>Prev</a></li> <li><a href='#0' class='next'>Next</a></li></ul>");
+            console.log(template.html());
         },
         attachEvents: function(){
             var self = this;
@@ -135,5 +160,17 @@
             }
         });
     };
-    $.fn[pluginName].defaults = {};
+    $.fn[pluginName].defaults =
+        {
+            "states":
+                [
+                    {
+                        "name": "default",
+                        "css":
+                            {
+                                "background-color": "white"
+                            }
+                    }
+                ]
+        };
 })(jQuery);
