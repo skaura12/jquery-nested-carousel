@@ -4,8 +4,8 @@
     function Plugin(element,options){
         this.$ele = element;
         this.options = $.extend({}, $.fn[pluginName].defaults,options);
-        this.buildTemplate();
-        //this.init();
+        //this.buildTemplate();
+        this.init();
     }
 
     function getTranslateValue(obj){
@@ -35,6 +35,9 @@
     Plugin.prototype = {
         init: function(){
             var self = this,
+                selectedOuterNode,selectedInnerNode;
+            self.buildTemplate();
+/*            var self = this,
                 selectedOuterNode = this.$ele.find(".list > ol > li.selected"),
                 selectedInnerNode;
 
@@ -53,6 +56,10 @@
 
             selectedOuterNode.addClass("selected");
             selectedInnerNode.addClass("selected");
+            selectedOuterNode.append("<div class='active'>"+selectedInnerNode.data('content')+"</div");*/
+
+            selectedOuterNode = self.$ele.find(".list ol li.selected");
+            selectedInnerNode = selectedOuterNode.find("li a.selected");
             selectedOuterNode.append("<div class='active'>"+selectedInnerNode.data('content')+"</div");
             self.totalContentWidth = 0;
             self.$ele.find(".list > ol >li").each(function(){
@@ -70,19 +77,20 @@
                 var innerList = $("<ul></ul>");
                 outerNode.list.forEach(function(innerNode){
                     var anchorNode = $("<a href='#0'></a>");
-                    anchorNode.addClass(self.options.states[innerNode.state].name).data('name',innerNode.name);
+                    anchorNode.addClass(self.options.states[innerNode.state].name).data('content',innerNode.name);
                     if(innerNode.selected){
                         anchorNode.addClass("selected");
                     }
-                    $("<li class="+ ((outerNode.selected)?'selected':'') +" ></li>").append(anchorNode).appendTo(innerList);
+                    $("<li></li>").append(anchorNode).appendTo(innerList);
                 });
-                $("<li></li>").append(innerList).appendTo(outerList);
+                $("<li class="+ ((outerNode.selected)?'selected':'') +"><div>"+outerNode.name+"</div></li>").append(innerList).appendTo(outerList);
             });
 
             template.find(".list").append(outerList);
             //append navigation buttons
-            template.append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev'>Prev</a></li> <li><a href='#0' class='next'>Next</a></li></ul>");
+            template.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev'>Prev</a></li> <li><a href='#0' class='next'>Next</a></li></ul>");
             console.log(template.html());
+            template.appendTo(self.$ele);
         },
         attachEvents: function(){
             var self = this;
