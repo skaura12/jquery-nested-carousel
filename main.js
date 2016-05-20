@@ -37,47 +37,49 @@
             var self = this,
                 selectedOuterNode,selectedInnerNode;
             self.buildTemplate();
-/*            var self = this,
-                selectedOuterNode = this.$ele.find(".list > ol > li.selected"),
-                selectedInnerNode;
+            var sheet = (function() {
+                // Create the <style> tag
+                var style = document.createElement("style");
 
+                // WebKit hack :(
+                style.appendChild(document.createTextNode(""));
 
-            self.outerNodeList = self.$ele.find(".list > ol >li");
+                // Add the <style> element to the page
+                document.head.appendChild(style);
 
-            if(!selectedOuterNode.length){
-                selectedOuterNode = $(self.outerNodeList[0]);
-            }
-
-            selectedInnerNode = selectedOuterNode.find("a.selected");
-            if(!selectedInnerNode.length){
-                selectedInnerNode = $(selectedOuterNode.find("a")[0]);
-            }
-            resetListItems(self.outerNodeList);
-
-            selectedOuterNode.addClass("selected");
-            selectedInnerNode.addClass("selected");
-            selectedOuterNode.append("<div class='active'>"+selectedInnerNode.data('content')+"</div");*/
+                return style.sheet;
+            })();
+            self.options.states.forEach(function(state){
+                var rules = "{";
+                for(key in state.css){
+                    rules += key + ":"+state.css[key] + ";";
+                }
+                rules += "}";
+                sheet.insertRule("."+state.name +":after "+rules,0);
+            });
 
             selectedOuterNode = self.$ele.find(".list ol li.selected");
             selectedInnerNode = selectedOuterNode.find("li a.selected");
             selectedOuterNode.append("<div class='active'>"+selectedInnerNode.data('content')+"</div");
+            //self.$ele.find(".list .selected").html(selectedOuterNode.html());
             self.totalContentWidth = 0;
             self.$ele.find(".list > ol >li").each(function(){
                 self.totalContentWidth = self.totalContentWidth + $(this).outerWidth();
             });
-            self.containerWidth = self.$ele.find(".list ol").width();
+            self.containerWidth = self.$ele.find(".list").outerWidth();
             self.attachEvents();
+            self.updateSlider();
         },
         buildTemplate: function(){
             var self = this,
-                template = $("<section class='ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'></div></div></section>"),
+                template = $("<section class='ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'><div class='selected'></div></div></div></section>"),
                 outerList = $("<ol></ol>");
 
             self.options.data.forEach(function(outerNode){
                 var innerList = $("<ul></ul>");
                 outerNode.list.forEach(function(innerNode){
-                    var anchorNode = $("<a href='#0'></a>");
-                    anchorNode.addClass(self.options.states[innerNode.state].name).data('content',innerNode.name);
+                    var anchorNode = $("<a href='#0' data-content='"+ innerNode.name +"' ></a>");
+                    anchorNode.addClass(self.options.states[innerNode.state].name);
                     if(innerNode.selected){
                         anchorNode.addClass("selected");
                     }
@@ -96,61 +98,35 @@
             var self = this;
 
             self.$ele.find(".ns-timeline-navigation a.prev").on("click",function(){
-                var currentTranslateValue,contentWidthTillSelectedListItem = 0,contentWidthTillPrevOfSelected,translationValue;
                 if(self.$ele.find("ol > li.selected").prev().length){
-
-                    currentTranslateValue = getTranslateValue(self.$ele.find(".list ol"));
-
-                    self.$ele.find(".list > ol > li").each(function(){
-                        contentWidthTillSelectedListItem += $(this).outerWidth();
-                        if($(this).hasClass("selected")){
-                            return false;
-                        }
-                    });
-                    contentWidthTillPrevOfSelected = contentWidthTillSelectedListItem - self.$ele.find("ol > li.selected").outerWidth();
-
-                    if((contentWidthTillPrevOfSelected + currentTranslateValue) < self.$ele.find("ol > li.selected").prev().outerWidth()){
-                        //translation required
-                        if( (self.containerWidth -currentTranslateValue - contentWidthTillPrevOfSelected) < contentWidthTillPrevOfSelected){
-                            translationValue = self.containerWidth -currentTranslateValue - contentWidthTillPrevOfSelected;
-                        }else{
-                            translationValue = -currentTranslateValue;
-                        }
-                        self.$ele.find(".list ol").css("transform", "translateX(" + (currentTranslateValue + translationValue) + "px)");
-                    }
                     self.$ele.find("ol > li.selected > div.active").remove();
                     self.$ele.find("ol > li.selected a.selected").removeClass("selected");
                     self.$ele.find("ol > li.selected").removeClass("selected").prev().addClass("selected").append("<div class='active'>"+self.$ele.find("ol > li.selected a").data('content')+"</div");
                     $(self.$ele.find("ol > li.selected a")[0]).addClass("selected");
+                    //self.$ele.find(".list .selected").html(self.$ele.find("ol > li.selected").html());
+                    if(parseInt(self.$ele.find(".list > .selected").css("min-width")) < self.$ele.find("ol > li.selected").outerWidth()){
+                        self.$ele.find(".list > .selected").width(self.$ele.find("ol > li.selected").outerWidth());
+                    }else{
+                        self.$ele.find(".list > .selected").css("width","");
+                    }
+                    self.updateSlider();
 
                 }
             });
 
             self.$ele.find(".ns-timeline-navigation a.next").on("click",function(){
-                var contentWidthTillSelectedListItem = 0,translation,currentTranslateValue,translateValue,widthFromOriginTillSelected;
 
                 if(self.$ele.find("ol > li.selected").next().length){
-                    self.$ele.find(".list > ol > li").each(function(){
-                        contentWidthTillSelectedListItem += $(this).outerWidth();
-                        if($(this).hasClass("selected")){
-                            return false;
-                        }
-                    });
-                    currentTranslateValue = getTranslateValue(self.$ele.find(".list ol"));
-                    widthFromOriginTillSelected = contentWidthTillSelectedListItem + currentTranslateValue;
-                    if((widthFromOriginTillSelected+ self.$ele.find("ol > li.selected").next().outerWidth()) > self.containerWidth) {
-                        if ((self.totalContentWidth + currentTranslateValue - self.containerWidth) > widthFromOriginTillSelected) {
-                            translation = widthFromOriginTillSelected;
-                        } else {
-                            translation = (self.totalContentWidth + currentTranslateValue - self.containerWidth);
-                        }
-                        console.log("translation", translation);
-                        self.$ele.find(".list ol").css("transform", "translateX(" + (currentTranslateValue - translation) + "px)");
-                    }
+
                     self.$ele.find("ol > li.selected > div.active").remove();
                     self.$ele.find("ol > li.selected a.selected").removeClass("selected");
                     self.$ele.find("ol > li.selected").removeClass("selected").next().addClass("selected").append("<div class='active'>"+self.$ele.find("ol > li.selected a").data('content')+"</div");
                     $(self.$ele.find("ol > li.selected a")[0]).addClass("selected");
+                   // self.$ele.find(".list .selected").html(self.$ele.find("ol > li.selected").html());
+                    if(parseInt(self.$ele.find(".list > .selected").css("min-width")) < self.$ele.find("ol > li.selected").outerWidth()){
+                        self.$ele.find(".list > .selected").width(self.$ele.find("ol > li.selected").outerWidth());
+                    }
+                    self.updateSlider();
                 }
             });
 
@@ -159,6 +135,20 @@
                 $(event.delegateTarget).find("li.selected a.selected").removeClass("selected");
                 $(event.delegateTarget).find("li.selected div.active").html($(event.target).addClass("selected").data("content"));
             })
+
+        },
+        updateSlider: function(){
+            var self=this,
+                destinationXOffset,
+                sourceXOffset,
+                currentTranslateValue,
+                translation;
+
+            destinationXOffset = self.$ele.find(".list").offset().left + self.containerWidth/2 - self.$ele.find("ol > li.selected").outerWidth()/2;
+            sourceXOffset = self.$ele.find("ol li.selected").offset().left;
+            translation = destinationXOffset - sourceXOffset;
+            currentTranslateValue = getTranslateValue(self.$ele.find(".list ol"));
+            self.$ele.find(".list ol").css("transform", "translateX(" + (currentTranslateValue +     translation) + "px)");
         }
     };
     $.fn[pluginName] = function(options){

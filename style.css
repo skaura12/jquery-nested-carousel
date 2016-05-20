@@ -17,7 +17,22 @@
   .ns-horizontal-timeline .timeline .list-wrapper .list {
     white-space: nowrap;
     overflow: hidden;
-    margin: 0 40px; }
+    margin: 0 40px;
+    position: relative; }
+    .ns-horizontal-timeline .timeline .list-wrapper .list div.selected {
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      vertical-align: top;
+      text-align: center;
+      height: 100px;
+      box-sizing: border-box;
+      padding: 10px;
+      background-color: #E2E2E2;
+      z-index: -1;
+      min-width: 200px; }
     .ns-horizontal-timeline .timeline .list-wrapper .list ol {
       -webkit-transition: -webkit-transform 0.6s;
       -moz-transition: -moz-transform 0.6s;
@@ -37,10 +52,7 @@
           -moz-transition: opacity 0.4s;
           transition: opacity 0.4s; }
         .ns-horizontal-timeline .timeline .list-wrapper .list ol > li.selected {
-          background-color: #E2E2E2;
-          -webkit-transition: background-color 0.4s;
-          -moz-transition: background-color 0.4s;
-          transition: background-color 0.4s; }
+          min-width: 200px; }
         .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li {
           display: inline-block; }
           .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li > a::after {
