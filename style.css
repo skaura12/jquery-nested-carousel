@@ -46,7 +46,6 @@
         box-sizing: border-box;
         padding: 10px; }
         .ns-horizontal-timeline .timeline .list-wrapper .list ol > li:not(.selected) {
-          pointer-events: none;
           opacity: 0.4;
           -webkit-transition: opacity 0.4s;
           -moz-transition: opacity 0.4s;

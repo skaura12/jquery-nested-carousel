@@ -59,7 +59,6 @@
             padding: 10px;
 
             &:not(.selected) {
-              pointer-events: none;
               opacity: 0.4;
               @include transition(opacity .4s);
             }
