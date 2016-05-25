@@ -1,4 +1,4 @@
-(function($){
+;(function($){
     var pluginName = 'nestedTimeline';
 
     function Plugin(element,options){
@@ -27,7 +27,7 @@
         init: function(){
             var self = this,
                 selectedOuterNode,selectedInnerNode;
-            self.buildTemplate();
+            self._buildTemplate();
             var sheet = (function() {
                 // Create the <style> tag
                 var style = document.createElement("style");
@@ -52,16 +52,15 @@
             selectedOuterNode = self.$ele.find(".list ol li.selected");
             selectedInnerNode = selectedOuterNode.find("li a.selected");
             selectedOuterNode.find("div.active").text(selectedInnerNode.data('content'));
-            //self.$ele.find(".list .selected").html(selectedOuterNode.html());
             self.totalContentWidth = 0;
             self.$ele.find(".list > ol >li").each(function(){
                 self.totalContentWidth = self.totalContentWidth + $(this).outerWidth();
             });
             self.containerWidth = self.$ele.find(".list").outerWidth();
-            self.attachEvents();
-            self.updateSlider();
+            self._attachEvents();
+            self._updateSlider();
         },
-        buildTemplate: function(){
+        _buildTemplate: function(){
             var self = this,
                 template = $("<section class='ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'><div class='selected'></div></div></div></section>"),
                 outerList = $("<ol></ol>");
@@ -69,7 +68,8 @@
             self.options.data.forEach(function(outerNode){
                 var innerList = $("<ul></ul>");
                 outerNode.list.forEach(function(innerNode){
-                    var anchorNode = $("<a href='#0' data-content='"+ innerNode.name +"' ></a>");
+                    var anchorNode = $("<a href='#0'></a>");
+                    anchorNode.data("content", (innerNode.name)?(innerNode.name):"").attr("data-id", innerNode.id);
                     anchorNode.addClass(self.options.states[innerNode.state].name);
                     if(innerNode.selected){
                         anchorNode.addClass("selected");
@@ -85,7 +85,7 @@
             console.log(template.html());
             template.appendTo(self.$ele);
         },
-        attachEvents: function(){
+        _attachEvents: function(){
             var self = this;
 
             self.$ele.find(".ns-timeline-navigation a.prev").on("click",function(){
@@ -94,8 +94,8 @@
                     self.$ele.find("ol > li.selected a.selected").removeClass("selected");
                     self.$ele.find("ol > li.selected").removeClass("selected").prev().addClass("selected").find("div.active").text(self.$ele.find("ol > li.selected a").data('content'));
                     $(self.$ele.find("ol > li.selected a")[0]).addClass("selected");
-                    self.updateSlider();
-                    self.updateSelectedContainerWidth();
+                    self._updateSlider();
+                    self._updateSelectedContainerWidth();
                 }
             });
 
@@ -107,26 +107,27 @@
                     self.$ele.find("ol > li.selected a.selected").removeClass("selected");
                     self.$ele.find("ol > li.selected").removeClass("selected").next().addClass("selected").find("div.active").text(self.$ele.find("ol > li.selected a").data('content'));
                     $(self.$ele.find("ol > li.selected a")[0]).addClass("selected");
-                    self.updateSlider();
-                    self.updateSelectedContainerWidth();
+                    self._updateSlider();
+                    self._updateSelectedContainerWidth();
                 }
             });
 
             self.$ele.find(".list ol").on("click","a",function(event){
                 var wrapperListItem = $(event.target).closest("ol > li");
                 event.preventDefault();
+                self.$ele.find("ol > li.selected > div.active").text("");
                 self.$ele.find("ol > li.selected a.selected").removeClass("selected");
                 if(!wrapperListItem.hasClass("selected")){
                     self.$ele.find("ol > li.selected").removeClass("selected");
                     wrapperListItem.addClass("selected");
-                    self.updateSlider();
-                    self.updateSelectedContainerWidth();
+                    self._updateSlider();
+                    self._updateSelectedContainerWidth();
                 }
                 $(event.delegateTarget).find("li.selected div.active").text($(event.target).addClass("selected").data("content"));
             })
 
         },
-        updateSlider: function(){
+        _updateSlider: function(){
             var self=this,
                 destinationXOffset,
                 sourceXOffset,
@@ -139,24 +140,57 @@
             currentTranslateValue = getTranslateValue(self.$ele.find(".list ol"));
             self.$ele.find(".list ol").css("transform", "translateX(" + (currentTranslateValue +     translation) + "px)");
         },
-        updateSelectedContainerWidth: function(){
+        _updateSelectedContainerWidth: function(){
             var self = this;
             if(parseInt(self.$ele.find(".list > .selected").css("min-width")) < self.$ele.find("ol > li.selected").outerWidth()){
                 self.$ele.find(".list > .selected").width(self.$ele.find("ol > li.selected").outerWidth());
             }else{
                 self.$ele.find(".list > .selected").css("width","");
             }
+        },
+        changeState: function(nodeData){
+            var self = this,
+                $node = self.$ele.find(".list a[data-id='"+nodeData.id+"']");
+
+            //reset node -- remove all state classes
+            self.options.states.forEach(function(state){
+                $node.removeClass(state.name);
+            });
+            $node.addClass(self.options.states[nodeData.state].name);
         }
     };
     $.fn[pluginName] = function(options){
-        return this.each(function(){
-            if (!$.data(this, "plugin_" + pluginName)) {
-                $.data(this, "plugin_" + pluginName,new Plugin( $(this), options ));
-            }
-        });
+        var args = arguments;
+        if(options == undefined || typeof options === 'object') {
+            return this.each(function () {
+                if (!$.data(this, "plugin_" + pluginName)) {
+                    $.data(this, "plugin_" + pluginName, new Plugin($(this), options));
+                }
+            });
+        }else if (typeof options === 'string' && options[0] !== '_' && options !== 'init') {
+
+            var returns;
+
+            this.each(function () {
+                var instance = $.data(this, 'plugin_' + pluginName);
+
+                if (instance instanceof Plugin && typeof instance[options] === 'function') {
+                    returns = instance[options].apply( instance, Array.prototype.slice.call( args, 1 ) );
+                }
+
+                // Allow instances to be destroyed via the 'destroy' method
+                /*if (options === 'destroy') {
+                 $.data(this, 'plugin_' + pluginName, null);
+                 }*/
+            });
+
+            return returns !== undefined ? returns : this;
+        }
     };
     $.fn[pluginName].defaults =
         {
+            "onOuterNodeSwitch": function(){},
+            "onInnerNodeSwitch": function(){},
             "states":
                 [
                     {
