@@ -150,6 +150,10 @@
                 $node.removeClass(state.name);
             });
             $node.addClass(self.options.states[nodeData.state].name);
+        },
+        destroy: function(){
+            this.$ele.empty();
+            $.data(this.$ele, 'plugin_' + pluginName, null);
         }
     };
     $.fn[pluginName] = function(options){
@@ -170,11 +174,6 @@
                 if (instance instanceof Plugin && typeof instance[options] === 'function') {
                     returns = instance[options].apply( instance, Array.prototype.slice.call( args, 1 ) );
                 }
-
-                // Allow instances to be destroyed via the 'destroy' method
-                /*if (options === 'destroy') {
-                 $.data(this, 'plugin_' + pluginName, null);
-                 }*/
             });
 
             return returns !== undefined ? returns : this;
@@ -182,8 +181,6 @@
     };
     $.fn[pluginName].defaults =
         {
-            "onOuterNodeSwitch": function(){},
-            "onInnerNodeSwitch": function(){},
             "states":
                 [
                     {
