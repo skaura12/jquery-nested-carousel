@@ -1,7 +1,7 @@
-@import "bourbon/bourbon";
-@import './partials/variables'; // colors, fonts etc...
-@import './partials/mixins'; // custom mixins
-@import './partials/layout'; // responsive grid and media queries
+@import "../bourbon/_bourbon";
+@import '../partials/_variables'; // colors, fonts etc...
+@import '../partials/_mixins'; // custom mixins
+@import '../partials/_layout'; // responsive grid and media queries
 
 
 .ns-horizontal-timeline {
@@ -35,10 +35,7 @@
         div.selected{
           display: inline-block;
           position: absolute;
-          top:0;
-          left: 50%;
-          transform: translateX(-50%);
-          vertical-align: top;
+          @include center(x);
           text-align: center;
           height: 100px;
           box-sizing: border-box;
@@ -117,7 +114,7 @@
         height: 16px;
         width: 16px;
         @include center;
-        background: url(./img/cd-arrow.svg) no-repeat 0 0;
+        background: url(../img/cd-arrow.svg) no-repeat 0 0;
       }
 
       &.prev {

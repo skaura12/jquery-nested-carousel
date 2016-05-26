@@ -22,10 +22,13 @@
     .ns-horizontal-timeline .timeline .list-wrapper .list div.selected {
       display: inline-block;
       position: absolute;
-      top: 0;
       left: 50%;
+      right: auto;
+      -webkit-transform: translateX(-50%);
+      -moz-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      -o-transform: translateX(-50%);
       transform: translateX(-50%);
-      vertical-align: top;
       text-align: center;
       height: 100px;
       box-sizing: border-box;
@@ -106,7 +109,7 @@
       -ms-transform: translateX(-50%) translateY(-50%);
       -o-transform: translateX(-50%) translateY(-50%);
       transform: translateX(-50%) translateY(-50%);
-      background: url(./img/cd-arrow.svg) no-repeat 0 0; }
+      background: url(../img/cd-arrow.svg) no-repeat 0 0; }
     .ns-horizontal-timeline .timeline .ns-timeline-navigation a.prev {
       left: 0;
       -webkit-transform: translateY(-50%) rotate(180deg);

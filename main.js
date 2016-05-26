@@ -29,15 +29,8 @@
                 selectedOuterNode,selectedInnerNode;
             self._buildTemplate();
             var sheet = (function() {
-                // Create the <style> tag
                 var style = document.createElement("style");
-
-                // WebKit hack :(
-                style.appendChild(document.createTextNode(""));
-
-                // Add the <style> element to the page
                 document.head.appendChild(style);
-
                 return style.sheet;
             })();
             self.options.states.forEach(function(state){
@@ -46,7 +39,7 @@
                     rules += key + ":"+state.css[key] + ";";
                 }
                 rules += "}";
-                sheet.insertRule("."+state.name +":after "+rules,0);
+                sheet.insertRule(".ns-horizontal-timeline ."+ state.name +":after "+rules,0);
             });
 
             selectedOuterNode = self.$ele.find(".list ol li.selected");
