@@ -52,8 +52,10 @@
             self.containerWidth = self.$ele.find(".list").outerWidth();
             self._attachEvents();
             self._updateSlider();
+            self._updateSelectedContainerWidth();
         },
         _buildTemplate: function(){
+            //readability
             var self = this,
                 template = $("<section class='ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'><div class='selected'></div></div></div></section>"),
                 outerList = $("<ol></ol>");
@@ -69,7 +71,7 @@
                     }
                     $("<li></li>").append(anchorNode).appendTo(innerList);
                 });
-                $("<li class="+ ((outerNode.selected)?'selected':'') +"><div>"+outerNode.name+"</div></li>").append(innerList).append("<div class='active'></div>").appendTo(outerList);
+                $("<li class="+ ((outerNode.selected)?'selected':'') +"><div class='outer-list-name'>"+outerNode.name+"</div></li>").append(innerList).append("<div class='inner-selected-name active'></div>").appendTo(outerList);
             });
 
             template.find(".list").append(outerList);
@@ -81,7 +83,8 @@
         _attachEvents: function(){
             var self = this;
 
-            self.$ele.find(".ns-timeline-navigation a.prev").on("click",function(){
+            self.$ele.find(".ns-timeline-navigation a.prev").on("click",function(event){
+                event.preventDefault();
                 if(self.$ele.find("ol > li.selected").prev().length){
                     self.$ele.find("ol > li.selected > div.active").text("");
                     self.$ele.find("ol > li.selected a.selected").removeClass("selected");
@@ -93,7 +96,7 @@
             });
 
             self.$ele.find(".ns-timeline-navigation a.next").on("click",function(){
-
+                event.preventDefault();
                 if(self.$ele.find("ol > li.selected").next().length){
 
                     self.$ele.find("ol > li.selected > div.active").text("");
@@ -113,10 +116,11 @@
                 if(!wrapperListItem.hasClass("selected")){
                     self.$ele.find("ol > li.selected").removeClass("selected");
                     wrapperListItem.addClass("selected");
-                    self._updateSlider();
-                    self._updateSelectedContainerWidth();
+
                 }
                 $(event.delegateTarget).find("li.selected div.active").text($(event.target).addClass("selected").data("content"));
+                self._updateSlider();
+                self._updateSelectedContainerWidth();
             })
 
         },

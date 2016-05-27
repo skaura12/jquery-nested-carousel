@@ -20,7 +20,7 @@
 
   .timeline {
     position: relative;
-    font-size: 20px;
+    font-size: 16px;
     height: 100px;
     width: 90%;
     max-width: 800px;
@@ -53,14 +53,16 @@
             position: relative;
             height: 100px;
             box-sizing: border-box;
-            padding: 10px;
-
+            padding: 12px;
+            &.outer-list-name{
+              white-space: normal;
+            }
             &:not(.selected) {
               opacity: 0.4;
               @include transition(opacity .4s);
             }
             &.selected{
-              min-width: 200px  ;
+              min-width: 200px;
             }
             & > ul > li {
               display: inline-block;
@@ -72,7 +74,7 @@
                   height: 12px;
                   width: 12px;
                   display: inline-block;
-                  margin: 10px;
+                  margin: 12px;
                 }
                 &.done::after{
                   background-color: #000000;
