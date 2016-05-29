@@ -1,0 +1,30 @@
+{
+  "name": "nested-timeline",
+  "description": "nested timeline that takes 2 level nested json structure and provides a ui that allows switching between different levels effectively",
+  "main": [
+    "dist/js/jquery-nested-carousel.js",
+    "dist/css/style.css"
+  ],
+  "keywords": [
+    "nested",
+    "timeline",
+    "carousel"
+  ],
+  "authors": [
+    "sandeep kaura"
+  ],
+  "license": "nil",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "bourbon": "^4.2.7"
+  }
+}

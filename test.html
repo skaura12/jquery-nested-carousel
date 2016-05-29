@@ -1,13 +1,12 @@
 <html>
 <head>
     <title>Nested Horizontal Timeline</title>
-    <link rel="stylesheet" type="text/css" href="scss/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-    <script src="main.js"></script>
+    <link rel="stylesheet" type="text/css" href="dist/css/style.css">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="dist/js/jquery-nested-carousel.min.js"></script>
 </head>
-<div class="horizontal-timeline">
-</div>
-
+<div id="test-carousel"></div>
+<div id="project-carousel"></div>
 <script>
 
     (function ($) {
@@ -374,7 +373,8 @@
             });
             carouselData.push(currentObjective);
         });
-        $(".horizontal-timeline").nestedTimeline({"data": carouselData, "states": carouselNodeStates});
+        $("#test-carousel").nestedTimeline({"data": data, "states": states});
+        $("#project-carousel").nestedTimeline({"data": carouselData, "states": carouselNodeStates});
     })(jQuery);
 </script>
 </html>

@@ -1,7 +1,7 @@
-@import "../bourbon/_bourbon";
-@import '../partials/_variables'; // colors, fonts etc...
-@import '../partials/_mixins'; // custom mixins
-@import '../partials/_layout'; // responsive grid and media queries
+@import "../../bower_components/bourbon/app/assets/stylesheets/bourbon";
+@import './partials/_variables'; // colors, fonts etc...
+@import './partials/_mixins'; // custom mixins
+@import './partials/_layout'; // responsive grid and media queries
 
 
 .ns-horizontal-timeline {
@@ -9,6 +9,7 @@
     margin: 0;
     padding: 0;
     border: 0;
+
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
@@ -116,7 +117,7 @@
         height: 16px;
         width: 16px;
         @include center;
-        background: url(../img/cd-arrow.svg) no-repeat 0 0;
+        background: url(../assets/img/cd-arrow.svg) no-repeat 0 0;
       }
 
       &.prev {
