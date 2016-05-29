@@ -20,8 +20,8 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "test.html",
+	"gulpfile.js"
   ],
   "dependencies": {
     "jquery": "^2.2.4",
