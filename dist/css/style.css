@@ -11,10 +11,10 @@
 
 .ns-horizontal-timeline .timeline {
   position: relative;
-  font-size: 16px;
+  font-size: 14px;
   height: 100px;
   width: 90%;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto; }
   .ns-horizontal-timeline .timeline .list-wrapper .list {
     white-space: nowrap;
@@ -52,8 +52,10 @@
         height: 100px;
         box-sizing: border-box;
         padding: 12px; }
-        .ns-horizontal-timeline .timeline .list-wrapper .list ol > li.outer-list-name {
-          white-space: normal; }
+        .ns-horizontal-timeline .timeline .list-wrapper .list ol > li .outer-list-name {
+          font-weight: bold; }
+        .ns-horizontal-timeline .timeline .list-wrapper .list ol > li .inner-selected-name {
+          color: green; }
         .ns-horizontal-timeline .timeline .list-wrapper .list ol > li:not(.selected) {
           opacity: 0.4;
           -webkit-transition: opacity 0.4s;
@@ -70,7 +72,7 @@
             height: 12px;
             width: 12px;
             display: inline-block;
-            margin: 12px; }
+            margin: 14px; }
           .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li > a.done::after {
             background-color: #000000; }
           .ns-horizontal-timeline .timeline .list-wrapper .list ol > li > ul > li > a.in-progress::after {
@@ -126,7 +128,7 @@
     .ns-horizontal-timeline .timeline .ns-timeline-navigation a.next {
       right: 0; }
     .ns-horizontal-timeline .timeline .ns-timeline-navigation a:hover {
-      border-color: #7b9d6f; }
+      border-color: green; }
     .ns-horizontal-timeline .timeline .ns-timeline-navigation a.inactive {
       cursor: not-allowed; }
       .ns-horizontal-timeline .timeline .ns-timeline-navigation a.inactive::after {

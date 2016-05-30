@@ -21,10 +21,10 @@
 
   .timeline {
     position: relative;
-    font-size: 16px;
+    font-size: 14px;
     height: 100px;
     width: 90%;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
 
     .list-wrapper {
@@ -57,8 +57,11 @@
             height: 100px;
             box-sizing: border-box;
             padding: 12px;
-            &.outer-list-name{
-              white-space: normal;
+            .outer-list-name{
+              font-weight: bold;
+            }
+            .inner-selected-name{
+              color: $color-2;
             }
             &:not(.selected) {
               opacity: 0.4;
@@ -77,7 +80,7 @@
                   height: 12px;
                   width: 12px;
                   display: inline-block;
-                  margin: 12px;
+                  margin: 14px;
                 }
                 &.done::after{
                   background-color: #000000;
@@ -86,7 +89,7 @@
                   background-color: white;
                 }
                 &.selected::after {
-                  background-color: green;
+                  background-color: $color-2;
                 }
               }
             }
