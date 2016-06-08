@@ -28,6 +28,7 @@
             var self = this,
                 selectedOuterNode,selectedInnerNode;
             self._buildTemplate();
+            self._setNameContainerMaxWidth()
             var sheet = (function() {
                 var style = document.createElement("style");
                 document.head.appendChild(style);
@@ -44,7 +45,7 @@
 
             selectedOuterNode = self.$ele.find(".list ol li.selected");
             selectedInnerNode = selectedOuterNode.find("li a.selected");
-            selectedOuterNode.find("div.active").text(selectedInnerNode.data('content'));
+            selectedOuterNode.find("div.active > p").text(selectedInnerNode.data('content'));
             self.totalContentWidth = 0;
             self.$ele.find(".list > ol >li").each(function(){
                 self.totalContentWidth = self.totalContentWidth + $(this).outerWidth();
@@ -71,7 +72,7 @@
                     }
                     $("<li></li>").append(anchorNode).appendTo(innerList);
                 });
-                $("<li class="+ ((outerNode.selected)?'selected':'') +"><div class='outer-list-name'>"+outerNode.name+"</div></li>").append(innerList).append("<div class='inner-selected-name active'></div>").appendTo(outerList);
+                $("<li class="+ ((outerNode.selected)?'selected':'') +"><div class='outer-list-name'><p>"+outerNode.name+"</p></div></li>").append(innerList).append("<div class='inner-selected-name active'><p></p></div>").appendTo(outerList);
             });
 
             template.find(".list").append(outerList);
@@ -86,9 +87,9 @@
             self.$ele.find(".ns-timeline-navigation a.prev").on("click",function(event){
                 event.preventDefault();
                 if(self.$ele.find("ol > li.selected").prev().length){
-                    self.$ele.find("ol > li.selected > div.active").text("");
+                    self.$ele.find("ol > li.selected > div.active > p").text("");
                     self.$ele.find("ol > li.selected a.selected").removeClass("selected");
-                    self.$ele.find("ol > li.selected").removeClass("selected").prev().addClass("selected").find("div.active").text(self.$ele.find("ol > li.selected a").data('content'));
+                    self.$ele.find("ol > li.selected").removeClass("selected").prev().addClass("selected").find("div.active > p").text(self.$ele.find("ol > li.selected a").data('content'));
                     $(self.$ele.find("ol > li.selected a")[0]).addClass("selected");
                     self._updateSlider();
                     self._updateSelectedContainerWidth();
@@ -99,9 +100,9 @@
                 event.preventDefault();
                 if(self.$ele.find("ol > li.selected").next().length){
 
-                    self.$ele.find("ol > li.selected > div.active").text("");
+                    self.$ele.find("ol > li.selected > div.active > p").text("");
                     self.$ele.find("ol > li.selected a.selected").removeClass("selected");
-                    self.$ele.find("ol > li.selected").removeClass("selected").next().addClass("selected").find("div.active").text(self.$ele.find("ol > li.selected a").data('content'));
+                    self.$ele.find("ol > li.selected").removeClass("selected").next().addClass("selected").find("div.active > p").text(self.$ele.find("ol > li.selected a").data('content'));
                     $(self.$ele.find("ol > li.selected a")[0]).addClass("selected");
                     self._updateSlider();
                     self._updateSelectedContainerWidth();
@@ -111,14 +112,14 @@
             self.$ele.find(".list ol").on("click","a",function(event){
                 var wrapperListItem = $(event.target).closest("ol > li");
                 event.preventDefault();
-                self.$ele.find("ol > li.selected > div.active").text("");
+                self.$ele.find("ol > li.selected > div.active > p").text("");
                 self.$ele.find("ol > li.selected a.selected").removeClass("selected");
                 if(!wrapperListItem.hasClass("selected")){
                     self.$ele.find("ol > li.selected").removeClass("selected");
                     wrapperListItem.addClass("selected");
 
                 }
-                $(event.delegateTarget).find("li.selected div.active").text($(event.target).addClass("selected").data("content"));
+                $(event.delegateTarget).find("li.selected div.active > p").text($(event.target).addClass("selected").data("content"));
                 self._updateSlider();
                 self._updateSelectedContainerWidth();
             })
@@ -144,6 +145,24 @@
             }else{
                 self.$ele.find(".list > .selected").css("width","");
             }
+        },
+        _setNameContainerMaxWidth: function(){
+            var self = this,
+                outerList = self.$ele.find(".list ol > li");
+            outerList.each(function(){
+                var innerListWidth = 0,outerNode = $(this);
+                outerNode.find("ul > li").each(function(){
+                    var innerNode = $(this);
+                    innerListWidth += innerNode.outerWidth();
+                });
+                if(innerListWidth > 200){
+                    outerNode.find(".outer-list-name").css("max-width",innerListWidth);
+                    outerNode.find(".inner-selected-name").css("max-width",innerListWidth);
+                }else{
+                    outerNode.find(".outer-list-name").css("max-width",200);
+                    outerNode.find(".inner-selected-name").css("max-width",200);
+                }
+            })
         },
         changeState: function(nodeData){
             var self = this,

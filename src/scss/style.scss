@@ -5,7 +5,7 @@
 
 
 .ns-horizontal-timeline {
-  div,ol,ul,li,span{
+  div,ol,ul,li,span,p{
     margin: 0;
     padding: 0;
     border: 0;
@@ -21,7 +21,8 @@
 
   .timeline {
     position: relative;
-    font-size: 14px;
+    font-size: 12px;
+
     height: 100px;
     margin: 0 auto;
 
@@ -54,12 +55,40 @@
             position: relative;
             height: 100px;
             box-sizing: border-box;
-            padding: 12px;
+            padding: 5px;
             .outer-list-name{
               font-weight: bold;
+              height: 30px;
+              display: table;
+              margin: 0 auto;
+              white-space: normal;
+              p{
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                vertical-align: middle;
+                line-height: 15px;
+                height: 30px;
+              }
             }
             .inner-selected-name{
               color: $color-2;
+              height: 30px;
+              display: table;
+              margin: 0 auto;
+              white-space: normal;
+              p{
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                vertical-align: middle;
+                line-height: 15px;
+                height: 30px;
+              }
             }
             &:not(.selected) {
               opacity: 0.4;
@@ -75,10 +104,10 @@
                   content: '';
                   border: 2px solid gray;
                   border-radius: 50%;
-                  height: 12px;
-                  width: 12px;
+                  height: 10px;
+                  width: 10px;
                   display: inline-block;
-                  margin: 14px;
+                  margin: 8px;
                 }
                 &.done::after{
                   background-color: #000000;
