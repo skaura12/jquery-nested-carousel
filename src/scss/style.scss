@@ -39,7 +39,6 @@
           text-align: center;
           height: 100px;
           box-sizing: border-box;
-          padding: 10px;
           background-color: #E2E2E2;
           z-index: 1;
           min-width: 200px;
@@ -59,35 +58,48 @@
             .outer-list-name{
               font-weight: bold;
               height: 30px;
-              display: table;
+              line-height: 15px;
+              overflow: hidden;
               margin: 0 auto;
+              text-overflow: ellipsis;
               white-space: normal;
+              &:after {
+                content: "";
+                height: 100%;
+                display: inline-block;
+                vertical-align: middle;
+              }
               p{
-                display: -webkit-box;
+                display: inline-block;
+                display: -webkit-inline-box;
+                max-height: 100%;
+                vertical-align: middle;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 2;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                vertical-align: middle;
-                line-height: 15px;
-                height: 30px;
               }
             }
             .inner-selected-name{
               color: $color-2;
+              font-weight: bold;
               height: 30px;
-              display: table;
+              line-height: 15px;
+              overflow: hidden;
               margin: 0 auto;
+              text-overflow: ellipsis;
               white-space: normal;
+              &:after {
+                content: "";
+                height: 100%;
+                display: inline-block;
+                vertical-align: middle;
+              }
               p{
-                display: -webkit-box;
+                display: inline-block;
+                display: -webkit-inline-box;
+                max-height: 100%;
+                vertical-align: middle;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 2;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                vertical-align: middle;
-                line-height: 15px;
-                height: 30px;
               }
             }
             &:not(.selected) {

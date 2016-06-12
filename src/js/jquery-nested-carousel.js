@@ -96,7 +96,7 @@
                 }
             });
 
-            self.$ele.find(".ns-timeline-navigation a.next").on("click",function(){
+            self.$ele.find(".ns-timeline-navigation a.next").on("click",function(event){
                 event.preventDefault();
                 if(self.$ele.find("ol > li.selected").next().length){
 

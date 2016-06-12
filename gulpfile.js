@@ -47,4 +47,5 @@ gulp.task("default",["clean"],function(){
 
 gulp.task("build",["scripts","styles","other"],function(){
     gulp.watch(options.src + "/scss/**/*.scss",["styles"]);
+    gulp.watch(options.src + "/**/*.js",["scripts"]);
 });
