@@ -4,7 +4,10 @@
     <link rel="stylesheet" type="text/css" href="dist/css/style.css">
     <style>
         #test-carousel, #project-carousel {
-            width: 800px;
+            position:relative;
+            top: 100px;
+            width: 75%;
+            text-align: center;
             margin:auto;
         }
     </style>
@@ -365,8 +368,8 @@
             });
             carouselData.push(currentObjective);
         });
-        $("#test-carousel").nestedTimeline({"data": data, "states": states});
-        $("#project-carousel").nestedTimeline({"data": carouselData, "states": carouselNodeStates});
+        $("#test-carousel").nestedTimeline({"data": data});
+        $("#project-carousel").nestedTimeline({"data": carouselData});
     })(jQuery);
 </script>
 </html>

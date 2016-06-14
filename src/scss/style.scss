@@ -4,6 +4,7 @@
 @import './partials/_layout'; // responsive grid and media queries
 
 
+
 .ns-horizontal-timeline {
   div,ol,ul,li,span,p{
     margin: 0;
@@ -104,7 +105,6 @@
             }
             &:not(.selected) {
               opacity: 0.4;
-              @include transition(opacity .4s);
             }
             &.selected{
               min-width: 200px;
@@ -121,11 +121,10 @@
                   display: inline-block;
                   margin: 8px;
                 }
-                &.done::after{
-                  background-color: #000000;
-                }
-                &.in-progress::after{
-                  background-color: white;
+                @each $state,$color in $state-colors {
+                  &.#{$state}::after{
+                    background-color: $color;
+                  }
                 }
                 &.selected::after {
                   background-color: $color-2;
