@@ -28,7 +28,7 @@
             var self = this,
                 selectedOuterNode,selectedInnerNode;
             self._buildTemplate();
-            self._setNameContainerMaxWidth();
+            self._setNameContainerWidth();
             selectedOuterNode = self.$ele.find(".list ol li.selected");
             selectedInnerNode = selectedOuterNode.find("li a.selected");
             selectedOuterNode.find("div.active > p").text(selectedInnerNode.data('content'));
@@ -107,8 +107,12 @@
                 }
                 $(event.delegateTarget).find("li.selected div.active > p").text($(event.target).addClass("selected").data("content"));
                 self._updateSelectedContainerWidth();
-            })
+            });
 
+            $(window).on("resize",function(event){
+                self.containerWidth = self.$ele.find(".list").outerWidth();
+                self._updateSlider();
+            });
         },
         _updateSlider: function(){
             var self=this,
@@ -125,13 +129,9 @@
         },
         _updateSelectedContainerWidth: function(){
             var self = this;
-            if(parseInt(self.$ele.find(".list > .selected").css("min-width")) < self.$ele.find("ol > li.selected").outerWidth()){
-                self.$ele.find(".list > .selected").width(self.$ele.find("ol > li.selected").outerWidth());
-            }else{
-                self.$ele.find(".list > .selected").css("width","");
-            }
+            self.$ele.find(".list > .selected").width(self.$ele.find("ol > li.selected").outerWidth());
         },
-        _setNameContainerMaxWidth: function(){
+        _setNameContainerWidth: function(){
             var self = this,
                 outerList = self.$ele.find(".list ol > li");
             outerList.each(function(){
@@ -141,11 +141,11 @@
                     innerListWidth += innerNode.outerWidth();
                 });
                 if(innerListWidth > 200){
-                    outerNode.find(".outer-list-name").css("max-width",innerListWidth);
-                    outerNode.find(".inner-selected-name").css("max-width",innerListWidth);
+                    outerNode.find(".outer-list-name").css("width",innerListWidth);
+                    outerNode.find(".inner-selected-name").css("width",innerListWidth);
                 }else{
-                    outerNode.find(".outer-list-name").css("max-width",200);
-                    outerNode.find(".inner-selected-name").css("max-width",200);
+                    outerNode.find(".outer-list-name").css("width",200);
+                    outerNode.find(".inner-selected-name").css("width",200);
                 }
             })
         },
@@ -153,7 +153,7 @@
             var self = this,
                 $node = self.$ele.find(".list a[data-id='"+nodeData.id+"']");
 
-            //remove al classess from $node that matches regex state-*
+            //remove all classes from $node that matches regex state-*
             $node.removeClass (function (index, css) {
                 return (css.match(/\bstate-\S+/g) || []).join(' ');
             });
