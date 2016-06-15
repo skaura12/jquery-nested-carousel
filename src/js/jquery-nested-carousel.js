@@ -45,10 +45,10 @@
             //readability
             var self = this,
                 template = $("<section class='ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'><div class='selected'></div></div></div></section>"),
-                outerList = $("<ol></ol>");
+                outerList = $("<ol class='outer-nodes-container'></ol>");
 
             self.options.data.forEach(function(outerNode){
-                var innerList = $("<ul></ul>");
+                var innerList = $("<ul class='inner-nodes-container'></ul>");
                 outerNode.list.forEach(function(innerNode){
                     var anchorNode = $("<a href='#0'></a>");
                     anchorNode.data("content", (innerNode.name)?(innerNode.name):"").attr("data-id", innerNode.id);
@@ -56,9 +56,9 @@
                     if(innerNode.selected){
                         anchorNode.addClass("selected");
                     }
-                    $("<li></li>").append(anchorNode).appendTo(innerList);
+                    $("<li class='inner-node'></li>").append(anchorNode).appendTo(innerList);
                 });
-                $("<li class="+ ((outerNode.selected)?'selected':'') +"><div class='outer-list-name'><p>"+outerNode.name+"</p></div></li>").append(innerList).append("<div class='inner-selected-name active'><p></p></div>").appendTo(outerList);
+                $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"'><div class='outer-list-name'><p>"+outerNode.name+"</p></div></li>").append(innerList).append("<div class='inner-selected-name active'><p></p></div>").appendTo(outerList);
             });
 
             template.find(".list").append(outerList);
@@ -79,7 +79,7 @@
                     $(self.$ele.find("ol > li.selected a")[0]).addClass("selected");
                     self._updateSlider();
                     self._updateSelectedContainerWidth();
-                }
+               }
             });
 
             self.$ele.find(".ns-timeline-navigation a.next").on("click",function(event){
@@ -94,9 +94,13 @@
                 }
             });
 
-            self.$ele.find(".list ol").on("click","a",function(event){
-                var wrapperListItem = $(event.target).closest("ol > li");
+            self.$ele.find(".list .outer-nodes-container").on("click",".outer-node:not('.selected')",function(event){
+                $($(event.currentTarget).find(".inner-node a")[0]).trigger("click");
+            });
+
+            self.$ele.find(".list .inner-nodes-container").on("click","a",function(event){
                 event.preventDefault();
+                var wrapperListItem = $(event.target).closest(".outer-node");
                 self.$ele.find("ol > li.selected > div.active > p").text("");
                 self.$ele.find("ol > li.selected a.selected").removeClass("selected");
                 if(!wrapperListItem.hasClass("selected")){
@@ -105,13 +109,13 @@
                     wrapperListItem.addClass("selected");
                     self._updateSlider();
                 }
-                $(event.delegateTarget).find("li.selected div.active > p").text($(event.target).addClass("selected").data("content"));
+                wrapperListItem.find("div.active > p").text($(event.target).addClass("selected").data("content"));
                 self._updateSelectedContainerWidth();
+                event.stopPropagation();
             });
 
             $(window).on("resize",function(event){
-                self.containerWidth = self.$ele.find(".list").outerWidth();
-                self._updateSlider();
+                self.resize();
             });
         },
         _updateSlider: function(){
@@ -149,6 +153,22 @@
                 }
             })
         },
+/*        _hideOverflowListItems: function(){
+            var self = this,
+                outerlist = self.$ele.find(".outer-node"),
+                xlowerBound = self.$ele.find(".list").offset().left,
+                xUpperBound = self.$ele.find(".list").offset().left + self.containerWidth;
+
+            outerlist.each(function(){
+                if($(this).offset().left < xlowerBound){
+                    $(this).addClass("hidden");
+                }else if(($(this).offset().left + $(this).outerWidth())> xUpperBound){
+                    $(this).addClass("hidden");
+                }else{
+                    $(this).removeClass("hidden");
+                }
+            });
+        },*/
         changeState: function(nodeData){
             var self = this,
                 $node = self.$ele.find(".list a[data-id='"+nodeData.id+"']");
@@ -157,8 +177,14 @@
             $node.removeClass (function (index, css) {
                 return (css.match(/\bstate-\S+/g) || []).join(' ');
             });
-
             $node.addClass("state-"+nodeData.state);
+        },
+        resize:function(){
+            var self = this;
+            //recalculate the available width
+            self.containerWidth = self.$ele.find(".list").outerWidth();
+            //update slider position
+            self._updateSlider();
         },
         destroy: function(){
             this.$ele.empty();

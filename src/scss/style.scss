@@ -19,7 +19,9 @@
   ol,ul{
     list-style: none;
   }
-
+  .hidden{
+    visibility: hidden;
+  }
   .timeline {
     position: relative;
     font-size: 12px;
@@ -44,11 +46,11 @@
           z-index: 1;
           min-width: 200px;
         }
-        ol{
+        .outer-nodes-container{
           @include transition(transform 0.6s);
           position: relative;
           z-index: 2;
-          & > li{
+          & > .outer-node{
             display: inline-block;
             vertical-align: top;
             text-align: center;
@@ -56,6 +58,7 @@
             height: 100px;
             box-sizing: border-box;
             padding: 5px;
+            cursor: pointer;
             .outer-list-name{
               font-weight: bold;
               height: 30px;
@@ -109,7 +112,7 @@
             &.selected{
               min-width: 200px;
             }
-            & > ul > li {
+            & > .inner-nodes-container > .inner-node {
               display: inline-block;
               & > a {
                 &::after {
