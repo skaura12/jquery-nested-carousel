@@ -28,23 +28,10 @@
             var self = this,
                 selectedOuterNode,selectedInnerNode;
             self._buildTemplate();
-            var sheet = (function() {
-                var style = document.createElement("style");
-                document.head.appendChild(style);
-                return style.sheet;
-            })();
-            self.options.states.forEach(function(state){
-                var rules = "{";
-                for(key in state.css){
-                    rules += key + ":"+state.css[key] + ";";
-                }
-                rules += "}";
-                sheet.insertRule(".ns-horizontal-timeline ."+ state.name +":after "+rules,0);
-            });
-
+            self._setNameContainerWidth();
             selectedOuterNode = self.$ele.find(".list ol li.selected");
             selectedInnerNode = selectedOuterNode.find("li a.selected");
-            selectedOuterNode.find("div.active").text(selectedInnerNode.data('content'));
+            selectedOuterNode.find("div.active > p").text(selectedInnerNode.data('content'));
             self.totalContentWidth = 0;
             self.$ele.find(".list > ol >li").each(function(){
                 self.totalContentWidth = self.totalContentWidth + $(this).outerWidth();
@@ -58,20 +45,20 @@
             //readability
             var self = this,
                 template = $("<section class='ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'><div class='selected'></div></div></div></section>"),
-                outerList = $("<ol></ol>");
+                outerList = $("<ol class='outer-nodes-container'></ol>");
 
             self.options.data.forEach(function(outerNode){
-                var innerList = $("<ul></ul>");
+                var innerList = $("<ul class='inner-nodes-container'></ul>");
                 outerNode.list.forEach(function(innerNode){
                     var anchorNode = $("<a href='#0'></a>");
                     anchorNode.data("content", (innerNode.name)?(innerNode.name):"").attr("data-id", innerNode.id);
-                    anchorNode.addClass(self.options.states[innerNode.state].name);
+                    anchorNode.addClass("state-"+innerNode.state);
                     if(innerNode.selected){
                         anchorNode.addClass("selected");
                     }
-                    $("<li></li>").append(anchorNode).appendTo(innerList);
+                    $("<li class='inner-node'></li>").append(anchorNode).appendTo(innerList);
                 });
-                $("<li class="+ ((outerNode.selected)?'selected':'') +"><div class='outer-list-name'>"+outerNode.name+"</div></li>").append(innerList).append("<div class='inner-selected-name active'></div>").appendTo(outerList);
+                $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"'><div class='outer-list-name'><p>"+outerNode.name+"</p></div></li>").append(innerList).append("<div class='inner-selected-name active'><p></p></div>").appendTo(outerList);
             });
 
             template.find(".list").append(outerList);
@@ -86,43 +73,50 @@
             self.$ele.find(".ns-timeline-navigation a.prev").on("click",function(event){
                 event.preventDefault();
                 if(self.$ele.find("ol > li.selected").prev().length){
-                    self.$ele.find("ol > li.selected > div.active").text("");
+                    self.$ele.find("ol > li.selected > div.active > p").text("");
                     self.$ele.find("ol > li.selected a.selected").removeClass("selected");
-                    self.$ele.find("ol > li.selected").removeClass("selected").prev().addClass("selected").find("div.active").text(self.$ele.find("ol > li.selected a").data('content'));
+                    self.$ele.find("ol > li.selected").removeClass("selected").prev().addClass("selected").find("div.active > p").text(self.$ele.find("ol > li.selected a").data('content'));
                     $(self.$ele.find("ol > li.selected a")[0]).addClass("selected");
                     self._updateSlider();
                     self._updateSelectedContainerWidth();
-                }
+               }
             });
 
-            self.$ele.find(".ns-timeline-navigation a.next").on("click",function(){
+            self.$ele.find(".ns-timeline-navigation a.next").on("click",function(event){
                 event.preventDefault();
                 if(self.$ele.find("ol > li.selected").next().length){
-
-                    self.$ele.find("ol > li.selected > div.active").text("");
+                    self.$ele.find("ol > li.selected > div.active > p").text("");
                     self.$ele.find("ol > li.selected a.selected").removeClass("selected");
-                    self.$ele.find("ol > li.selected").removeClass("selected").next().addClass("selected").find("div.active").text(self.$ele.find("ol > li.selected a").data('content'));
+                    self.$ele.find("ol > li.selected").removeClass("selected").next().addClass("selected").find("div.active > p").text(self.$ele.find("ol > li.selected a").data('content'));
                     $(self.$ele.find("ol > li.selected a")[0]).addClass("selected");
                     self._updateSlider();
                     self._updateSelectedContainerWidth();
                 }
             });
 
-            self.$ele.find(".list ol").on("click","a",function(event){
-                var wrapperListItem = $(event.target).closest("ol > li");
+            self.$ele.find(".list .outer-nodes-container").on("click",".outer-node:not('.selected')",function(event){
+                $($(event.currentTarget).find(".inner-node a")[0]).trigger("click");
+            });
+
+            self.$ele.find(".list .inner-nodes-container").on("click","a",function(event){
                 event.preventDefault();
-                self.$ele.find("ol > li.selected > div.active").text("");
+                var wrapperListItem = $(event.target).closest(".outer-node");
+                self.$ele.find("ol > li.selected > div.active > p").text("");
                 self.$ele.find("ol > li.selected a.selected").removeClass("selected");
                 if(!wrapperListItem.hasClass("selected")){
+                    //when wrapper list item is not selected
                     self.$ele.find("ol > li.selected").removeClass("selected");
                     wrapperListItem.addClass("selected");
-
+                    self._updateSlider();
                 }
-                $(event.delegateTarget).find("li.selected div.active").text($(event.target).addClass("selected").data("content"));
-                self._updateSlider();
+                wrapperListItem.find("div.active > p").text($(event.target).addClass("selected").data("content"));
                 self._updateSelectedContainerWidth();
-            })
+                event.stopPropagation();
+            });
 
+            $(window).on("resize",function(event){
+                self.resize();
+            });
         },
         _updateSlider: function(){
             var self=this,
@@ -135,25 +129,74 @@
             sourceXOffset = self.$ele.find("ol li.selected").offset().left;
             translation = destinationXOffset - sourceXOffset;
             currentTranslateValue = getTranslateValue(self.$ele.find(".list ol"));
-            self.$ele.find(".list ol").css("transform", "translateX(" + (currentTranslateValue +     translation) + "px)");
+            self.$ele.find(".list ol").css("transform", "translateX(" + (currentTranslateValue + translation) + "px)");
+
+            if(!self.$ele.find("ol > li.selected").next().length){
+                self.$ele.find(".ns-timeline-navigation a.next").addClass("inactive");
+            }else{
+                self.$ele.find(".ns-timeline-navigation a.next").removeClass("inactive");
+            }
+
+            if(!self.$ele.find("ol > li.selected").prev().length){
+                self.$ele.find(".ns-timeline-navigation a.prev").addClass("inactive");
+            }else{
+                self.$ele.find(".ns-timeline-navigation a.prev").removeClass("inactive");
+            }
         },
         _updateSelectedContainerWidth: function(){
             var self = this;
-            if(parseInt(self.$ele.find(".list > .selected").css("min-width")) < self.$ele.find("ol > li.selected").outerWidth()){
-                self.$ele.find(".list > .selected").width(self.$ele.find("ol > li.selected").outerWidth());
-            }else{
-                self.$ele.find(".list > .selected").css("width","");
-            }
+            self.$ele.find(".list > .selected").width(self.$ele.find("ol > li.selected").outerWidth());
         },
+        _setNameContainerWidth: function(){
+            var self = this,
+                outerList = self.$ele.find(".list ol > li");
+            outerList.each(function(){
+                var innerListWidth = 0,outerNode = $(this);
+                outerNode.find("ul > li").each(function(){
+                    var innerNode = $(this);
+                    innerListWidth += innerNode.outerWidth();
+                });
+                if(innerListWidth > 200){
+                    outerNode.find(".outer-list-name").css("width",innerListWidth);
+                    outerNode.find(".inner-selected-name").css("width",innerListWidth);
+                }else{
+                    outerNode.find(".outer-list-name").css("width",200);
+                    outerNode.find(".inner-selected-name").css("width",200);
+                }
+            })
+        },
+/*        _hideOverflowListItems: function(){
+            var self = this,
+                outerlist = self.$ele.find(".outer-node"),
+                xlowerBound = self.$ele.find(".list").offset().left,
+                xUpperBound = self.$ele.find(".list").offset().left + self.containerWidth;
+
+            outerlist.each(function(){
+                if($(this).offset().left < xlowerBound){
+                    $(this).addClass("hidden");
+                }else if(($(this).offset().left + $(this).outerWidth())> xUpperBound){
+                    $(this).addClass("hidden");
+                }else{
+                    $(this).removeClass("hidden");
+                }
+            });
+        },*/
         changeState: function(nodeData){
             var self = this,
                 $node = self.$ele.find(".list a[data-id='"+nodeData.id+"']");
 
-            //reset node -- remove all state classes
-            self.options.states.forEach(function(state){
-                $node.removeClass(state.name);
+            //remove all classes from $node that matches regex state-*
+            $node.removeClass (function (index, css) {
+                return (css.match(/\bstate-\S+/g) || []).join(' ');
             });
-            $node.addClass(self.options.states[nodeData.state].name);
+            $node.addClass("state-"+nodeData.state);
+        },
+        resize:function(){
+            var self = this;
+            //recalculate the available width
+            self.containerWidth = self.$ele.find(".list").outerWidth();
+            //update slider position
+            self._updateSlider();
         },
         destroy: function(){
             this.$ele.empty();
@@ -183,17 +226,5 @@
             return returns !== undefined ? returns : this;
         }
     };
-    $.fn[pluginName].defaults =
-        {
-            "states":
-                [
-                    {
-                        "name": "default",
-                        "css":
-                            {
-                                "background-color": "white"
-                            }
-                    }
-                ]
-        };
+    $.fn[pluginName].defaults = {};
 })(jQuery);

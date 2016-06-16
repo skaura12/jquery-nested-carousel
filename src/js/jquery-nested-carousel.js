@@ -130,6 +130,18 @@
             translation = destinationXOffset - sourceXOffset;
             currentTranslateValue = getTranslateValue(self.$ele.find(".list ol"));
             self.$ele.find(".list ol").css("transform", "translateX(" + (currentTranslateValue + translation) + "px)");
+
+            if(!self.$ele.find("ol > li.selected").next().length){
+                self.$ele.find(".ns-timeline-navigation a.next").addClass("inactive");
+            }else{
+                self.$ele.find(".ns-timeline-navigation a.next").removeClass("inactive");
+            }
+
+            if(!self.$ele.find("ol > li.selected").prev().length){
+                self.$ele.find(".ns-timeline-navigation a.prev").addClass("inactive");
+            }else{
+                self.$ele.find(".ns-timeline-navigation a.prev").removeClass("inactive");
+            }
         },
         _updateSelectedContainerWidth: function(){
             var self = this;
