@@ -4,16 +4,19 @@
     <link rel="stylesheet" type="text/css" href="dist/css/style.css">
     <style>
         #test-carousel, #project-carousel {
-            width: 800px;
+            position:relative;
+            top: 100px;
+            width: 75%;
+            text-align: center;
             margin:auto;
         }
     </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="dist/js/jquery-nested-carousel.js"></script>
 </head>
-
+<!--
 <div id="test-carousel"></div>
-
+-->
 <div id="project-carousel"></div>
 <script>
 
@@ -365,8 +368,8 @@
             });
             carouselData.push(currentObjective);
         });
-        $("#test-carousel").nestedTimeline({"data": data, "states": states});
-        $("#project-carousel").nestedTimeline({"data": carouselData, "states": carouselNodeStates});
+        $("#test-carousel").nestedTimeline({"data": data});
+        $("#project-carousel").nestedTimeline({"data": carouselData});
     })(jQuery);
 </script>
 </html>
