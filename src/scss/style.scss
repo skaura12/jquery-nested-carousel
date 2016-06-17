@@ -44,6 +44,7 @@
           box-sizing: border-box;
           background-color: #E2E2E2;
           z-index: 1;
+          border-radius: 2px;
           min-width: 200px;
         }
         .outer-nodes-container{
@@ -57,7 +58,7 @@
             position: relative;
             height: 100px;
             box-sizing: border-box;
-            padding: 5px;
+            padding: 5px 10px;
             cursor: pointer;
             .outer-list-name{
               font-weight: bold;

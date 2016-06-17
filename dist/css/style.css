@@ -37,6 +37,7 @@
       box-sizing: border-box;
       background-color: #E2E2E2;
       z-index: 1;
+      border-radius: 2px;
       min-width: 200px; }
     .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container {
       -webkit-transition: -webkit-transform 0.6s;
@@ -51,7 +52,7 @@
         position: relative;
         height: 100px;
         box-sizing: border-box;
-        padding: 5px;
+        padding: 5px 10px;
         cursor: pointer; }
         .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node .outer-list-name {
           font-weight: bold;
@@ -109,9 +110,9 @@
             display: inline-block;
             margin: 8px; }
           .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.state-0::after {
-            background-color: #000000; }
-          .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.state-1::after {
             background-color: #ffffff; }
+          .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.state-1::after {
+            background-color: #000000; }
           .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.state-2::after {
             background-color: #ff0000; }
           .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.state-3::after {
