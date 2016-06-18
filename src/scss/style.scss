@@ -62,8 +62,8 @@
             cursor: pointer;
             .outer-list-name{
               font-weight: bold;
-              height: 30px;
-              line-height: 15px;
+              height: 32px;
+              line-height: 16px;
               overflow: hidden;
               margin: 0 auto;
               text-overflow: ellipsis;
@@ -86,8 +86,9 @@
             .inner-selected-name{
               color: $color-2;
               font-weight: bold;
-              height: 30px;
-              line-height: 15px;
+              font-size: 14px;
+              height: 32px;
+              line-height: 16px;
               overflow: hidden;
               margin: 0 auto;
               text-overflow: ellipsis;
@@ -109,6 +110,10 @@
             }
             &:not(.selected) {
               opacity: 0.4;
+              border-right: 2px dashed;
+            }
+            &.prev-of-selected{
+              border-right: 0;
             }
             &.selected{
               min-width: 200px;
@@ -123,7 +128,7 @@
                   height: 10px;
                   width: 10px;
                   display: inline-block;
-                  margin: 8px;
+                  margin: 6px;
                 }
                 @each $state,$color in $state-colors {
                   &.#{$state}::after{

@@ -56,8 +56,8 @@
         cursor: pointer; }
         .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node .outer-list-name {
           font-weight: bold;
-          height: 30px;
-          line-height: 15px;
+          height: 32px;
+          line-height: 16px;
           overflow: hidden;
           margin: 0 auto;
           text-overflow: ellipsis;
@@ -77,8 +77,9 @@
         .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node .inner-selected-name {
           color: green;
           font-weight: bold;
-          height: 30px;
-          line-height: 15px;
+          font-size: 14px;
+          height: 32px;
+          line-height: 16px;
           overflow: hidden;
           margin: 0 auto;
           text-overflow: ellipsis;
@@ -96,7 +97,10 @@
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2; }
         .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node:not(.selected) {
-          opacity: 0.4; }
+          opacity: 0.4;
+          border-right: 2px dashed; }
+        .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node.prev-of-selected {
+          border-right: 0; }
         .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node.selected {
           min-width: 200px; }
         .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node {
@@ -108,7 +112,7 @@
             height: 10px;
             width: 10px;
             display: inline-block;
-            margin: 8px; }
+            margin: 6px; }
           .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.state-0::after {
             background-color: #ffffff; }
           .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.state-1::after {
