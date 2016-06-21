@@ -24,7 +24,7 @@ gulp.task("styles",function(){
         .pipe(sass())
         .pipe(gulp.dest(options.dist + '/css'))
         .pipe(cssnano())
-        .pipe(rename({ extname : '.min.js'}))
+        .pipe(rename({ extname : '.min.css'}))
         .pipe(gulp.dest(options.dist + '/css'));
 });
 
