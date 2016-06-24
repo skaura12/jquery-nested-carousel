@@ -1,9 +1,10 @@
+/* Core stylesheet file for jquery-nested-carousal */
+/* Resolving import definitions */
+
 @import "../../bower_components/bourbon/app/assets/stylesheets/bourbon";
 @import './partials/_variables'; // colors, fonts etc...
 @import './partials/_mixins'; // custom mixins
 @import './partials/_layout'; // responsive grid and media queries
-
-
 
 .ns-horizontal-timeline {
   div,ol,ul,li,span,p{

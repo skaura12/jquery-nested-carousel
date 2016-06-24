@@ -1,3 +1,5 @@
+/* Core stylesheet file for jquery-nested-carousal */
+/* Resolving import definitions */
 .ns-horizontal-timeline div, .ns-horizontal-timeline ol, .ns-horizontal-timeline ul, .ns-horizontal-timeline li, .ns-horizontal-timeline span, .ns-horizontal-timeline p {
   margin: 0;
   padding: 0;
