@@ -8,15 +8,13 @@
             top: 100px;
             width: 75%;
             text-align: center;
-            margin:auto;
+            margin:50px auto;
         }
     </style>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="dist/js/jquery-nested-carousel.js"></script>
 </head>
-<!--
 <div id="test-carousel"></div>
--->
 <div id="project-carousel"></div>
 <script>
 
@@ -24,6 +22,7 @@
         var data =
                 [
                     {
+                        "id": 1,
                         "name": "Introduction to Project 1A Flyer",
                         "list": [
                             {
@@ -33,6 +32,7 @@
                         ]
                     },
                     {
+                        "id": 2,
                         "name": "Objective 1",
                         "list": [
                             {
@@ -48,6 +48,7 @@
                         ]
                     },
                     {
+                        "id": 3,
                         "name": "Objective 2",
                         "selected": true,
                         "list": [
@@ -75,6 +76,7 @@
                         ]
                     },
                     {
+                        "id": 4,
                         "name": "Objective 3",
                         "list": [
                             {
@@ -110,6 +112,7 @@
                         ]
                     },
                     {
+                        "id": 5,
                         "name": "Objective 4",
                         "list": [
                             {
@@ -146,21 +149,6 @@
                     }
                 ];
 
-        var states =
-                [
-                    {
-                        "name": "in-progress",
-                        "css": {
-                            "background-color": "white"
-                        }
-                    },
-                    {
-                        "name": "completed",
-                        "css": {
-                            "background-color": "black"
-                        }
-                    }
-                ];
         var projectJson =
         {
             "id": "1A",
@@ -175,6 +163,7 @@
                     "order": 1,
                     "name": "Explore Microsoft Office 2016",
                     "progress": 60,
+                    "id": 1,
                     "activities": [
                         {
                             "id": "1",
@@ -210,6 +199,7 @@
                     ]
                 },
                 {
+                    "id": 2,
                     "order": 2,
                     "name": "Enter, Edit and Check th Spelling of Text in an Office 2016 Program",
                     "progress": 10,
@@ -233,6 +223,7 @@
                     ]
                 },
                 {
+                    "id": 3,
                     "order": 3,
                     "name": "Create a Folder and Name and Save a File",
                     "progress": 10,
@@ -276,6 +267,7 @@
                     ]
                 },
                 {
+                    "id": 4,
                     "order": 4,
                     "name": "Insert a Footer,Add Document Properties, Print a File, and Close a Desktop App",
                     "progress": 10,
@@ -320,24 +312,10 @@
                 }
             ]
         };
-        var     carouselData = [],
-                carouselNodeStates =
-                        [
-                            {
-                                "name": "in-progress",
-                                "css": {
-                                    "background-color": "white"
-                                }
-                            },
-                            {
-                                "name": "completed",
-                                "css": {
-                                    "background-color": "black"
-                                }
-                            }
-                        ];
+        var     carouselData = [];
 
         carouselData.push({
+            "id": 0,
             "name": projectJson.title,
             "list": [
                 {
@@ -348,6 +326,7 @@
         });
         projectJson.objectives.forEach(function (objective,objIndex) {
             var currentObjective = {
+                "id": objective.id,
                 "name": objective.name,
                 "list": []
             };
@@ -368,8 +347,8 @@
             });
             carouselData.push(currentObjective);
         });
-        $("#test-carousel").nestedTimeline({"data": data});
-        $("#project-carousel").nestedTimeline({"data": carouselData});
+        $("#test-carousel").nestedTimeline({"data": data,"nodeSwitchCallback": function(nodeData){console.log("NodeData",nodeData);}});
+        $("#project-carousel").nestedTimeline({"data": carouselData,"nodeSwitchCallback": function(nodeData){console.log("NodeData",nodeData);}});
     })(jQuery);
 </script>
 </html>
