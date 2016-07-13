@@ -59,7 +59,7 @@
                     }
                     $("<li class='inner-node'></li>").append(anchorNode).appendTo(innerList);
                 });
-                $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"'><div class='outer-list-name'><p>"+outerNode.name+"</p></div></li>").append(innerList).append("<div class='inner-selected-name active'><p></p></div>").appendTo(outerList);
+                $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"' data-id='"+outerNode.id+"' data-name='"+outerNode.name+"'><div class='outer-list-name'><p>"+outerNode.name+"</p></div></li>").append(innerList).append("<div class='inner-selected-name active'><p></p></div>").appendTo(outerList);
             });
 
             template.find(".list").append(outerList);
@@ -73,28 +73,14 @@
             self.$ele.find(".ns-timeline-navigation a.prev").on("click",function(event){
                 event.preventDefault();
                 if(self.$ele.find("ol > li.selected").prev().length){
-                    self.$ele.find("ol > li.selected > div.active > p").text("");
-                    self.$ele.find("ol > li.selected a.selected").removeClass("selected");
-                    self.$ele.find("ol > li.selected").prev().removeClass("prev-of-selected");
-                    self.$ele.find("ol > li.selected").removeClass("selected").prev().addClass("selected").find("div.active > p").text(self.$ele.find("ol > li.selected a").data('content'));
-                    self.$ele.find("ol > li.selected").prev().addClass("prev-of-selected");
-                    $(self.$ele.find("ol > li.selected a")[0]).addClass("selected");
-                    self._updateSlider();
-                    self._updateSelectedContainerWidth();
+                    self.$ele.find("ol > li.selected").prev().trigger("click");
                }
             });
 
             self.$ele.find(".ns-timeline-navigation a.next").on("click",function(event){
                 event.preventDefault();
                 if(self.$ele.find("ol > li.selected").next().length){
-                    self.$ele.find("ol > li.selected > div.active > p").text("");
-                    self.$ele.find("ol > li.selected a.selected").removeClass("selected");
-                    self.$ele.find("ol > li.selected").prev().removeClass("prev-of-selected");
-                    self.$ele.find("ol > li.selected").removeClass("selected").next().addClass("selected").find("div.active > p").text(self.$ele.find("ol > li.selected a").data('content')).prev().addClass("prev-of-selected");
-                    self.$ele.find("ol > li.selected").prev().addClass("prev-of-selected");
-                    $(self.$ele.find("ol > li.selected a")[0]).addClass("selected");
-                    self._updateSlider();
-                    self._updateSelectedContainerWidth();
+                    self.$ele.find("ol > li.selected").next().trigger("click");
                 }
             });
 
@@ -116,6 +102,16 @@
                 }
                 wrapperListItem.find("div.active > p").text($(event.target).addClass("selected").data("content"));
                 self._updateSelectedContainerWidth();
+                if(typeof self.options.nodeSwitchCallback === "function") {
+                    self.options.nodeSwitchCallback({
+                        id: self.$ele.find("ol > li.selected").data("id"),
+                        name: self.$ele.find("ol > li.selected").data("name"),
+                        nestedNode: {
+                            id: self.$ele.find("ol > li.selected a.selected").data("id"),
+                            name: self.$ele.find("ol > li.selected a.selected").data("content")
+                        }
+                    });
+                }
                 event.stopPropagation();
             });
 
