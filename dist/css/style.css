@@ -125,7 +125,7 @@
             background-color: #00ff00; }
           .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.state-4::after {
             background-color: #0000ff; }
-          .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.selected::after {
+          .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node.selected > a::after {
             background-color: green; }
   .ns-horizontal-timeline .timeline .ns-timeline-navigation a {
     /* these are the left/right arrows to navigate the timeline */

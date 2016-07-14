@@ -136,9 +136,9 @@
                     background-color: $color;
                   }
                 }
-                &.selected::after {
-                  background-color: $color-2;
-                }
+              }
+              &.selected > a::after {
+                background-color: $color-2;
               }
             }
           }
