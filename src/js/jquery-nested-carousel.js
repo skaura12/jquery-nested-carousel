@@ -109,8 +109,8 @@
                         id: self.$ele.find(".outer-node.selected").data("id"),
                         name: self.$ele.find(".outer-node.selected").data("name"),
                         nestedNode: {
-                            id: self.$ele.find(".outer-node.selected a.selected").data("id"),
-                            name: self.$ele.find(".outer-node.selected a.selected").data("content")
+                            id: self.$ele.find(".outer-node.selected .inner-node.selected a").data("id"),
+                            name: self.$ele.find(".outer-node.selected .inner-node.selected a").data("content")
                         }
                     });
                 }
