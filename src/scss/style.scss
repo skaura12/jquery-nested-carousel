@@ -27,7 +27,7 @@
     position: relative;
     font-size: 12px;
 
-    height: 100px;
+    height: 110px;
     margin: 0 auto;
 
     .list-wrapper {
@@ -48,19 +48,23 @@
           border-radius: 2px;
           min-width: 200px;
         }
+        div.selected{
+          display: none;
+        }
         .outer-nodes-container{
           @include transition(transform 0.6s);
+          height: 100%;
           position: relative;
           z-index: 2;
           & > .outer-node{
             display: inline-block;
-            vertical-align: top;
+            vertical-align: middle;
             text-align: center;
             position: relative;
-            height: 100px;
             box-sizing: border-box;
             padding: 5px 10px;
             cursor: pointer;
+            border: 1px solid gray;
             .outer-list-name{
               font-weight: bold;
               height: 32px;
@@ -111,13 +115,19 @@
             }
             &:not(.selected) {
               opacity: 0.4;
-              border-right: 2px dashed;
+              .inner-selected-name{
+                display: none;
+              }
+              margin: 0 10px;
             }
-            &.prev-of-selected{
-              border-right: 0;
-            }
+
             &.selected{
               min-width: 200px;
+              background-color: #E2E2E2;
+              transition: all 0.6s ease;
+              height: 100px;
+              margin: 5px 10px;
+              transform: scale(1.08);
             }
             & > .inner-nodes-container > .inner-node {
               display: inline-block;
