@@ -32,7 +32,6 @@
             selectedOuterNode = self.$ele.find(".list .outer-node.selected");
             selectedInnerNode = selectedOuterNode.find(".inner-node.selected");
             selectedOuterNode.find("div.active > p").text(selectedInnerNode.find("a").data('content'));
-            selectedOuterNode.prev().addClass("prev-of-selected");
             self.totalContentWidth = 0;
             self.$ele.find(".list > ol >li").each(function(){
                 self.totalContentWidth = self.totalContentWidth + $(this).outerWidth();
@@ -40,12 +39,11 @@
             self.containerWidth = self.$ele.find(".list").outerWidth();
             self._attachEvents();
             self._updateSlider();
-            self._updateSelectedContainerWidth();
         },
         _buildTemplate: function(){
             //readability
             var self = this,
-                template = $("<section class='ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'><div class='selected'></div></div></div></section>"),
+                template = $("<section class='ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'></div></div></section>"),
                 outerList = $("<ol class='outer-nodes-container'></ol>");
 
             self.options.data.forEach(function(outerNode){
@@ -96,13 +94,11 @@
                 self.$ele.find(".outer-node.selected .inner-node.selected").removeClass("selected");
                 if(!wrapperListItem.hasClass("selected")){
                     //when wrapper list item is not selected
-                    self.$ele.find(".outer-node.selected").prev().removeClass("prev-of-selected");
                     self.$ele.find(".outer-node.selected").removeClass("selected");
-                    wrapperListItem.addClass("selected").prev().addClass("prev-of-selected");
+                    wrapperListItem.addClass("selected");
                     self._updateSlider();
                 }
                 wrapperListItem.find("div.active > p").text($(event.target).parent().addClass("selected").end().data("content"));
-                self._updateSelectedContainerWidth();
                 self._updateNavigationButtonState();
                 if(typeof self.options.nodeSwitchCallback === "function") {
                     self.options.nodeSwitchCallback({
@@ -132,11 +128,7 @@
             sourceXOffset = self.$ele.find("ol li.selected").offset().left;
             translation = destinationXOffset - sourceXOffset;
             currentTranslateValue = getTranslateValue(self.$ele.find(".list ol"));
-            self.$ele.find(".list ol").css("transform", "translateX(" + (currentTranslateValue + translation) + "px)");
-        },
-        _updateSelectedContainerWidth: function(){
-            var self = this;
-            self.$ele.find(".list > .selected").width(self.$ele.find("ol > li.selected").outerWidth());
+            self.$ele.find(".list ol").css("transform", "translate3d(" + (currentTranslateValue + translation) + "px,0px,0px)");
         },
         _setNameContainerWidth: function(){
             var self = this,
@@ -190,6 +182,9 @@
         destroy: function(){
             this.$ele.empty();
             $.data(this.$ele, 'plugin_' + pluginName, null);
+        },
+        switchNode: function(nodeData){
+            this.$ele.find(".outer-node[data-id = '"+nodeData.id+"'] .inner-node a[data-id = '"+nodeData.nestedNode.id+"']").trigger("click");
         }
 /*      _hideOverflowListItems: function(){
             var self = this,

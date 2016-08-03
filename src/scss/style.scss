@@ -36,26 +36,10 @@
         overflow: hidden;
         margin: 0 40px;
         position: relative;
-        div.selected{
-          display: inline-block;
-          position: absolute;
-          @include center(x);
-          text-align: center;
-          height: 100px;
-          box-sizing: border-box;
-          background-color: #E2E2E2;
-          z-index: 1;
-          border-radius: 2px;
-          min-width: 200px;
-        }
-        div.selected{
-          display: none;
-        }
         .outer-nodes-container{
-          @include transition(transform 0.6s);
+          @include transition(transform 0.6s ease);
           height: 100%;
           position: relative;
-          z-index: 2;
           & > .outer-node{
             display: inline-block;
             vertical-align: middle;
@@ -115,16 +99,16 @@
             }
             &:not(.selected) {
               opacity: 0.4;
-              .inner-selected-name{
+              margin: 0 10px;
+              .inner-selected-name {
                 display: none;
               }
-              margin: 0 10px;
             }
 
             &.selected{
               min-width: 200px;
               background-color: #E2E2E2;
-              transition: all 0.6s ease;
+              @include transition(transform 0.6s ease 0.1s);
               height: 100px;
               margin: 5px 10px;
               transform: scale(1.08);

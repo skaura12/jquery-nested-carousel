@@ -24,32 +24,12 @@
     overflow: hidden;
     margin: 0 40px;
     position: relative; }
-    .ns-horizontal-timeline .timeline .list-wrapper .list div.selected {
-      display: inline-block;
-      position: absolute;
-      left: 50%;
-      right: auto;
-      -webkit-transform: translateX(-50%);
-      -moz-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      -o-transform: translateX(-50%);
-      transform: translateX(-50%);
-      text-align: center;
-      height: 100px;
-      box-sizing: border-box;
-      background-color: #E2E2E2;
-      z-index: 1;
-      border-radius: 2px;
-      min-width: 200px; }
-    .ns-horizontal-timeline .timeline .list-wrapper .list div.selected {
-      display: none; }
     .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container {
-      -webkit-transition: -webkit-transform 0.6s;
-      -moz-transition: -moz-transform 0.6s;
-      transition: transform 0.6s;
+      -webkit-transition: -webkit-transform 0.6s ease;
+      -moz-transition: -moz-transform 0.6s ease;
+      transition: transform 0.6s ease;
       height: 100%;
-      position: relative;
-      z-index: 2; }
+      position: relative; }
       .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node {
         display: inline-block;
         vertical-align: middle;
@@ -109,7 +89,9 @@
         .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node.selected {
           min-width: 200px;
           background-color: #E2E2E2;
-          transition: all 0.6s ease;
+          -webkit-transition: -webkit-transform 0.6s ease 0.1s;
+          -moz-transition: -moz-transform 0.6s ease 0.1s;
+          transition: transform 0.6s ease 0.1s;
           height: 100px;
           margin: 5px 10px;
           transform: scale(1.08); }
