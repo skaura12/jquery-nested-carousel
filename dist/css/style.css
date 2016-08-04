@@ -17,45 +17,28 @@
 .ns-horizontal-timeline .timeline {
   position: relative;
   font-size: 12px;
-  height: 100px;
+  height: 110px;
   margin: 0 auto; }
   .ns-horizontal-timeline .timeline .list-wrapper .list {
     white-space: nowrap;
     overflow: hidden;
     margin: 0 40px;
     position: relative; }
-    .ns-horizontal-timeline .timeline .list-wrapper .list div.selected {
-      display: inline-block;
-      position: absolute;
-      left: 50%;
-      right: auto;
-      -webkit-transform: translateX(-50%);
-      -moz-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      -o-transform: translateX(-50%);
-      transform: translateX(-50%);
-      text-align: center;
-      height: 100px;
-      box-sizing: border-box;
-      background-color: #E2E2E2;
-      z-index: 1;
-      border-radius: 2px;
-      min-width: 200px; }
     .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container {
-      -webkit-transition: -webkit-transform 0.6s;
-      -moz-transition: -moz-transform 0.6s;
-      transition: transform 0.6s;
-      position: relative;
-      z-index: 2; }
+      -webkit-transition: -webkit-transform 0.6s ease;
+      -moz-transition: -moz-transform 0.6s ease;
+      transition: transform 0.6s ease;
+      height: 100%;
+      position: relative; }
       .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node {
         display: inline-block;
-        vertical-align: top;
+        vertical-align: middle;
         text-align: center;
         position: relative;
-        height: 100px;
         box-sizing: border-box;
         padding: 5px 10px;
-        cursor: pointer; }
+        cursor: pointer;
+        border: 1px solid gray; }
         .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node .outer-list-name {
           font-weight: bold;
           height: 32px;
@@ -100,11 +83,18 @@
             -webkit-line-clamp: 2; }
         .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node:not(.selected) {
           opacity: 0.4;
-          border-right: 2px dashed; }
-        .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node.prev-of-selected {
-          border-right: 0; }
+          margin: 0 10px; }
+          .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node:not(.selected) .inner-selected-name {
+            display: none; }
         .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node.selected {
-          min-width: 200px; }
+          min-width: 200px;
+          background-color: #E2E2E2;
+          -webkit-transition: -webkit-transform 0.6s ease 0.1s;
+          -moz-transition: -moz-transform 0.6s ease 0.1s;
+          transition: transform 0.6s ease 0.1s;
+          height: 100px;
+          margin: 5px 10px;
+          transform: scale(1.08); }
         .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node {
           display: inline-block; }
           .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a::after {
@@ -125,7 +115,7 @@
             background-color: #00ff00; }
           .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.state-4::after {
             background-color: #0000ff; }
-          .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.selected::after {
+          .ns-horizontal-timeline .timeline .list-wrapper .list .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node.selected > a::after {
             background-color: green; }
   .ns-horizontal-timeline .timeline .ns-timeline-navigation a {
     /* these are the left/right arrows to navigate the timeline */
