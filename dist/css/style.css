@@ -176,3 +176,14 @@
         background-position: 0 -16px; }
       .ns-horizontal-timeline .timeline .ns-timeline-navigation a.inactive:hover {
         border-color: #dfdfdf; }
+
+.ns-horizontal-timeline.basic-mode .outer-nodes-container .outer-node {
+  border: none; }
+  .ns-horizontal-timeline.basic-mode .outer-nodes-container .outer-node .outer-list-name {
+    display: none; }
+  .ns-horizontal-timeline.basic-mode .outer-nodes-container .outer-node .inner-nodes-container {
+    display: none; }
+  .ns-horizontal-timeline.basic-mode .outer-nodes-container .outer-node:not(.selected) {
+    display: none; }
+  .ns-horizontal-timeline.basic-mode .outer-nodes-container .outer-node.selected {
+    background-color: transparent; }

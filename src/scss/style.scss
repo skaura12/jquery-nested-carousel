@@ -7,6 +7,11 @@
 @import './partials/_layout'; // responsive grid and media queries
 
 .ns-horizontal-timeline {
+  @mixin hidden {
+    display: none;
+  }
+
+
   div,ol,ul,li,span,p{
     margin: 0;
     padding: 0;
@@ -193,6 +198,25 @@
 
         &:hover {
           border-color: darken($color-4, 10%);
+        }
+      }
+    }
+  }
+  &.basic-mode{
+    .outer-nodes-container{
+      .outer-node{
+        border: none;
+        .outer-list-name{
+          @include hidden;
+        }
+        .inner-nodes-container{
+          @include hidden;
+        }
+        &:not(.selected){
+          @include hidden;
+        }
+        &.selected{
+          background-color: transparent;
         }
       }
     }
