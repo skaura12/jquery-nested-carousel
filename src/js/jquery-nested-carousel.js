@@ -28,7 +28,10 @@
             var self = this,
                 selectedOuterNode,selectedInnerNode;
             self._buildTemplate();
-            self._setNameContainerWidth();
+            if(self.options.mode === "nested"){
+                self._setNameContainerWidth();
+            }
+            self.$ele.find(".ns-horizontal-timeline").addClass(self.options.mode+"-mode");
             selectedOuterNode = self.$ele.find(".list .outer-node.selected");
             selectedInnerNode = selectedOuterNode.find(".inner-node.selected");
             selectedOuterNode.find("div.active > p").text(selectedInnerNode.find("a").data('content'));
@@ -43,7 +46,7 @@
         _buildTemplate: function(){
             //readability
             var self = this,
-                template = $("<section class='ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'></div></div></section>"),
+                template = $("<section class='nested-mode ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'></div></div></section>"),
                 outerList = $("<ol class='outer-nodes-container'></ol>");
 
             self.options.data.forEach(function(outerNode){
@@ -148,6 +151,9 @@
                 }
             })
         },
+        _resetNestedNameContainerWidth: function(){
+            this.$ele.find(".list .inner-selected-name").css("width","100%");
+        },
         _updateNavigationButtonState: function(){
             var self = this;
             if(!self.$ele.find(".outer-node.selected .inner-node.selected").next().length && !self.$ele.find(".outer-node.selected").next().length){
@@ -183,9 +189,23 @@
             this.$ele.empty();
             $.data(this.$ele, 'plugin_' + pluginName, null);
         },
-        switchNode: function(nodeData){
+        selectNode: function(nodeData){
             this.$ele.find(".outer-node[data-id = '"+nodeData.id+"'] .inner-node a[data-id = '"+nodeData.nestedNode.id+"']").trigger("click");
+        },
+        switchMode: function(mode){
+            if(this.options.mode != mode){
+                if(mode === "nested"){
+                    this.options.mode = mode;
+                    this._setNameContainerWidth();
+                    this.$ele.find(".ns-horizontal-timeline").removeClass("nested-mode flattened-mode").addClass(mode+"-mode");
+                }else if(mode === "flattened"){
+                    this.options.mode = mode;
+                    //  this._resetNestedNameContainerWidth();
+                    this.$ele.find(".ns-horizontal-timeline").removeClass("nested-mode flattened-mode").addClass(mode+"-mode");
+                }
+            }
         }
+
 /*      _hideOverflowListItems: function(){
             var self = this,
                 outerlist = self.$ele.find(".outer-node"),
@@ -226,5 +246,7 @@
             return returns !== undefined ? returns : this;
         }
     };
-    $.fn[pluginName].defaults = {};
+    $.fn[pluginName].defaults = {
+        "mode": "nested"
+    };
 })(jQuery);
