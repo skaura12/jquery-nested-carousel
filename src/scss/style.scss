@@ -43,7 +43,6 @@
           & > .outer-node{
             display: inline-block;
             vertical-align: middle;
-            text-align: center;
             position: relative;
             box-sizing: border-box;
             padding: 5px 10px;
@@ -66,6 +65,7 @@
               p{
                 display: inline-block;
                 display: -webkit-inline-box;
+                text-align: center;
                 max-height: 100%;
                 vertical-align: middle;
                 -webkit-box-orient: vertical;
@@ -90,6 +90,7 @@
               }
               p{
                 display: inline-block;
+                text-align: center;
                 display: -webkit-inline-box;
                 max-height: 100%;
                 vertical-align: middle;
@@ -113,26 +114,29 @@
               margin: 5px 10px;
               transform: scale(1.08);
             }
-            & > .inner-nodes-container > .inner-node {
-              display: inline-block;
-              & > a {
-                &::after {
-                  content: '';
-                  border: 2px solid gray;
-                  border-radius: 50%;
-                  height: 10px;
-                  width: 10px;
+            & > .inner-nodes-container {
+              text-align: center;
+                & > .inner-node {
                   display: inline-block;
-                  margin: 6px;
-                }
-                @each $state,$color in $state-colors {
-                  &.#{$state}::after{
-                    background-color: $color;
+                  & > a {
+                    &::after {
+                      content: '';
+                      border: 2px solid gray;
+                      border-radius: 50%;
+                      height: 10px;
+                      width: 10px;
+                      display: inline-block;
+                      margin: 6px;
+                    }
+                    @each $state,$color in $state-colors {
+                      &.#{$state}::after{
+                        background-color: $color;
+                      }
+                    }
                   }
-                }
-              }
-              &.selected > a::after {
-                background-color: $color-2;
+                  &.selected > a::after {
+                    background-color: $color-2;
+                  }
               }
             }
           }
