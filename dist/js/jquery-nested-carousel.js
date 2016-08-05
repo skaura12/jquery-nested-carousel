@@ -91,6 +91,7 @@
             });
 
             self.$ele.find(".list .inner-nodes-container").on("click","a",function(event){
+                var innerSelectedName;
                 event.preventDefault();
                 var wrapperListItem = $(event.target).closest(".outer-node");
                 self.$ele.find(".outer-node.selected > div.active > p").text("");
@@ -99,9 +100,14 @@
                     //when wrapper list item is not selected
                     self.$ele.find(".outer-node.selected").removeClass("selected");
                     wrapperListItem.addClass("selected");
-                    self._updateSlider();
+                    if(self.options.mode === "nested"){
+                        self._updateSlider();
+                    }
                 }
                 wrapperListItem.find("div.active > p").text($(event.target).parent().addClass("selected").end().data("content"));
+                if(self.options.mode === "flattened" && !$(event.target).data("content").length){
+                    wrapperListItem.find("div.active > p").text(wrapperListItem.data("name"));
+                }
                 self._updateNavigationButtonState();
                 if(typeof self.options.nodeSwitchCallback === "function") {
                     self.options.nodeSwitchCallback({
@@ -131,7 +137,7 @@
             sourceXOffset = self.$ele.find("ol li.selected").offset().left;
             translation = destinationXOffset - sourceXOffset;
             currentTranslateValue = getTranslateValue(self.$ele.find(".list ol"));
-            self.$ele.find(".list ol").css("transform", "translate3d(" + (currentTranslateValue + translation) + "px,0px,0px)");
+            self.$ele.find(".list .outer-nodes-container").css("transform", "translate3d(" + (currentTranslateValue + translation) + "px,0px,0px)");
         },
         _setNameContainerWidth: function(){
             var self = this,
@@ -183,7 +189,9 @@
             //recalculate the available width
             self.containerWidth = self.$ele.find(".list").outerWidth();
             //update slider position
-            self._updateSlider();
+            if(self.options.mode === "nested"){
+                self._updateSlider();
+            }
         },
         destroy: function(){
             this.$ele.empty();
@@ -198,10 +206,15 @@
                     this.options.mode = mode;
                     this._setNameContainerWidth();
                     this.$ele.find(".ns-horizontal-timeline").removeClass("nested-mode flattened-mode").addClass(mode+"-mode");
+                    this.$ele.find(".outer-node.selected .inner-selected-name > p").text(this.$ele.find(".outer-node.selected .inner-node.selected a").data("content"));
+                    this._updateSlider();
                 }else if(mode === "flattened"){
                     this.options.mode = mode;
-                    //  this._resetNestedNameContainerWidth();
+                    this._resetNestedNameContainerWidth();
                     this.$ele.find(".ns-horizontal-timeline").removeClass("nested-mode flattened-mode").addClass(mode+"-mode");
+                    if(!this.$ele.find(".outer-node.selected .inner-node.selected a").data("content").length){
+                        this.$ele.find(".outer-node.selected .inner-selected-name > p").text(this.$ele.find(".outer-node.selected").data("name"));
+                    }
                 }
             }
         }

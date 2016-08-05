@@ -5,6 +5,7 @@
     <style>
         #test-carousel, #project-carousel {
             position:relative;
+            margin: 0 auto;
             top: 100px;
             width: 75%;
         }
@@ -350,6 +351,27 @@
 /*
         $("#test-carousel").nestedTimeline({"data": data,"nodeSwitchCallback": function(nodeData){console.log("NodeData",nodeData);}});
 */
+        console.log(carouselData);
+        carouselData.push({
+            "id": 789,
+            "name": "Project Assessment 3B",
+            "list": [
+                {
+                    "id": 1,
+                    "state": 0
+                }
+            ]
+        });
+        carouselData.push({
+            "id": 123,
+            "name": "End of Chapter",
+            "list": [
+                {
+                    "id": 1,
+                    "state": 0
+                }
+            ]
+        });
         $("#project-carousel").nestedTimeline({"data": carouselData,"mode":"nested","nodeSwitchCallback": function(nodeData){console.log("NodeData",nodeData);}});
     })(jQuery);
 </script>
