@@ -61,6 +61,7 @@
         border: 1px solid gray;
         .outer-list-name {
           font-weight: bold;
+          font-size: 14px;
           height: 32px;
           line-height: 16px;
           overflow: hidden;
@@ -87,13 +88,12 @@
         .inner-selected-name {
           color: $color-2;
           font-weight: bold;
-          font-size: 14px;
-          height: 32px;
-          line-height: 16px;
+          font-size: 18px;
+          height: 24px;
           overflow: hidden;
           margin: 0 auto;
           text-overflow: ellipsis;
-          white-space: normal;
+          white-space: nowrap;
           text-align: center;
           &:after {
             content: "";
@@ -104,11 +104,12 @@
           p {
             display: inline-block;
             text-align: center;
-            display: -webkit-inline-box;
             max-height: 100%;
             vertical-align: middle;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            width: inherit;
           }
         }
         &:not(.selected) {
@@ -136,10 +137,10 @@
                 content: '';
                 border: 2px solid gray;
                 border-radius: 50%;
-                height: 10px;
-                width: 10px;
+                height: 6px;
+                width: 6px;
                 display: inline-block;
-                margin: 6px;
+                margin: 10px;
               }
               @each $state, $color in $state-colors {
                 &.#{$state}::after {
@@ -177,7 +178,7 @@
         &.selected {
           background-color: transparent;
           .inner-selected-name {
-            font-size: 24px;
+            font-size: 20px;
             p{
               color: $color-2;
               line-height: 50px; //should match the height in order to vertically center the content

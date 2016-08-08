@@ -43,6 +43,7 @@
     border: 1px solid gray; }
     .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node .outer-list-name {
       font-weight: bold;
+      font-size: 14px;
       height: 32px;
       line-height: 16px;
       overflow: hidden;
@@ -66,13 +67,12 @@
     .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node .inner-selected-name {
       color: #4f93be;
       font-weight: bold;
-      font-size: 14px;
-      height: 32px;
-      line-height: 16px;
+      font-size: 18px;
+      height: 24px;
       overflow: hidden;
       margin: 0 auto;
       text-overflow: ellipsis;
-      white-space: normal;
+      white-space: nowrap;
       text-align: center; }
       .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node .inner-selected-name:after {
         content: "";
@@ -82,11 +82,12 @@
       .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node .inner-selected-name p {
         display: inline-block;
         text-align: center;
-        display: -webkit-inline-box;
         max-height: 100%;
         vertical-align: middle;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2; }
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        width: inherit; }
     .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node:not(.selected) {
       opacity: 0.4;
       margin: 0 10px;
@@ -109,10 +110,10 @@
           content: '';
           border: 2px solid gray;
           border-radius: 50%;
-          height: 10px;
-          width: 10px;
+          height: 6px;
+          width: 6px;
           display: inline-block;
-          margin: 6px; }
+          margin: 10px; }
         .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.state-0::after {
           background-color: #ffffff; }
         .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node > .inner-nodes-container > .inner-node > a.state-1::after {
@@ -143,7 +144,7 @@
     .ns-horizontal-timeline.flattened-mode .outer-nodes-container .outer-node.selected {
       background-color: transparent; }
       .ns-horizontal-timeline.flattened-mode .outer-nodes-container .outer-node.selected .inner-selected-name {
-        font-size: 24px; }
+        font-size: 20px; }
         .ns-horizontal-timeline.flattened-mode .outer-nodes-container .outer-node.selected .inner-selected-name p {
           color: #4f93be;
           line-height: 50px;

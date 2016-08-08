@@ -148,12 +148,12 @@
                     var innerNode = $(this);
                     innerListWidth += innerNode.outerWidth();
                 });
-                if(innerListWidth > 200){
+                if(innerListWidth > 300){
                     outerNode.find(".outer-list-name").css("width",innerListWidth);
                     outerNode.find(".inner-selected-name").css("width",innerListWidth);
                 }else{
-                    outerNode.find(".outer-list-name").css("width",200);
-                    outerNode.find(".inner-selected-name").css("width",200);
+                    outerNode.find(".outer-list-name").css("width",300);
+                    outerNode.find(".inner-selected-name").css("width",300);
                 }
             })
         },
