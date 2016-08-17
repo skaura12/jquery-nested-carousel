@@ -38,7 +38,7 @@
       .list {
         white-space: nowrap;
         overflow: hidden;
-        margin: 0 40px;
+        margin: 0 60px;
         position: relative;
       }
     }
@@ -199,23 +199,24 @@
     @include center(y);
     height: 34px;
     width: 34px;
-    border-radius: 50%;
-    border: 2px solid darken($color-4, 10%);
     /* replace text with an icon */
     overflow: hidden;
     color: transparent;
     text-indent: 100%;
     white-space: nowrap;
-    @include transition(border-color .3s);
 
     &::after {
       /* arrow icon */
       content: '';
       position: absolute;
-      height: 16px;
-      width: 16px;
-      @include center;
-      background: url(../assets/img/cd-arrow.svg) no-repeat 0 0;
+      height: 20px;
+      width: 20px;
+      left: 50%;
+      top: 50%;
+      border: 3px solid rgb(89,89,89);
+      border-top: none;
+      border-right: none;
+      @include transform(translateX(-50%) translateY(-50%) rotate(225deg));
     }
 
     &.prev {
@@ -227,19 +228,12 @@
       right: 0;
     }
 
-    &:hover {
-      border-color: $color-2;
-    }
 
     &.inactive {
       cursor: not-allowed;
 
       &::after {
-        background-position: 0 -16px;
-      }
-
-      &:hover {
-        border-color: darken($color-4, 10%);
+        border-color: #E2E2E2;
       }
     }
   }
