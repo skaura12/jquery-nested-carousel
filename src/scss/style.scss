@@ -57,7 +57,6 @@
         position: relative;
         box-sizing: border-box;
         padding: 5px 10px;
-        cursor: pointer;
         border: 1px solid gray;
         .outer-list-name {
           font-weight: bold;
@@ -83,17 +82,18 @@
             vertical-align: middle;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
+            @include user-select(none);
           }
         }
         .inner-selected-name {
           color: $color-2;
           font-weight: bold;
-          font-size: 18px;
-          height: 24px;
+          font-size: 16px;
+          height: 36px;
           overflow: hidden;
           margin: 0 auto;
           text-overflow: ellipsis;
-          white-space: nowrap;
+          white-space: normal;
           text-align: center;
           &:after {
             content: "";
@@ -103,21 +103,26 @@
           }
           p {
             display: inline-block;
+            display: -webkit-inline-box;
             text-align: center;
             max-height: 100%;
             vertical-align: middle;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
             width: inherit;
+            @include user-select(none);
           }
         }
         &:not(.selected) {
           opacity: 0.4;
           margin: 0 10px;
+          cursor: pointer;
           background-color: #E2E2E2;
           .inner-selected-name {
             display: none;
+          }
+          &:hover{
+            opacity: 0.8;
           }
         }
 
@@ -140,7 +145,12 @@
                 height: 6px;
                 width: 6px;
                 display: inline-block;
-                margin: 10px;
+                margin: 6px 10px;
+              }
+              &:hover{
+                &::after {
+                  background-color: $color-2 !important;
+                }
               }
               @each $state, $color in $state-colors {
                 &.#{$state}::after {
@@ -178,7 +188,7 @@
         &.selected {
           background-color: transparent;
           .inner-selected-name {
-            font-size: 20px;
+            font-size: 16px;
             p{
               color: $color-2;
               line-height: 50px; //should match the height in order to vertically center the content
