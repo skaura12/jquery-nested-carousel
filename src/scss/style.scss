@@ -1,6 +1,7 @@
 /* Core stylesheet file for jquery-nested-carousal */
 /* Resolving import definitions */
 @import "../../bower_components/bourbon/app/assets/stylesheets/bourbon";
+@import "../../bower_components/font-awesome/scss/font-awesome";
 @import './partials/_variables';
 // colors, fonts etc...
 @import './partials/_mixins';
@@ -57,7 +58,7 @@
         position: relative;
         box-sizing: border-box;
         padding: 5px 10px;
-        border: 1px solid gray;
+        border: 1px solid rgb(220,220,220);
         .outer-list-name {
           font-weight: bold;
           font-size: 14px;
@@ -217,62 +218,77 @@
       }
     }
   }
-  .ns-timeline-navigation a {
-    /* these are the left/right arrows to navigate the timeline */
-    position: absolute;
-    z-index: 1;
-    @include center(y);
-    height: 34px;
-    width: 34px;
-    /* replace text with an icon */
-    overflow: hidden;
-    color: transparent;
-    text-indent: 100%;
-    white-space: nowrap;
-
-    &::after {
-      /* arrow icon */
-      content: '';
+  .ns-timeline-navigation {
+    .move-left {
       position: absolute;
-      height: 20px;
-      width: 20px;
-      left: 50%;
-      top: 50%;
-      border: 3px solid #bfbfbf;
-      border-top: none;
-      border-right: none;
-      @include transform(translateX(-50%) translateY(-50%) rotate(225deg));
-    }
-
-    &.prev {
+      top: 0;
       left: 0;
-      @include transform(translateY(-50%) rotate(180deg));
-      &:not(.inactive) {
-        &:hover {
-          &::after {
-            border-color: #595959;
-          }
-        }
-      }
+      font-size: 20px;
+      cursor: pointer;
     }
-
-    &.next {
+    .move-right {
+      position: absolute;
+      top: 0;
       right: 0;
-      &:not(.inactive) {
-        &:hover {
-          &::after {
-            border-color: #595959;
-          }
-        }
-      }
+      font-size: 20px;
+      cursor: pointer;
     }
-
-
-    &.inactive {
-      cursor: not-allowed;
+    a {
+      /* these are the left/right arrows to navigate the timeline */
+      position: absolute;
+      z-index: 1;
+      @include center(y);
+      height: 34px;
+      width: 34px;
+      /* replace text with an icon */
+      overflow: hidden;
+      color: transparent;
+      text-indent: 100%;
+      white-space: nowrap;
 
       &::after {
-        border-color: #E2E2E2;
+        /* arrow icon */
+        content: '';
+        position: absolute;
+        height: 20px;
+        width: 20px;
+        left: 50%;
+        top: 50%;
+        border: 3px solid #bfbfbf;
+        border-top: none;
+        border-right: none;
+        @include transform(translateX(-50%) translateY(-50%) rotate(225deg));
+      }
+
+      &.prev {
+        left: 0;
+        @include transform(translateY(-50%) rotate(180deg));
+        &:not(.inactive) {
+          &:hover {
+            &::after {
+              border-color: #595959;
+            }
+          }
+        }
+      }
+
+      &.next {
+        right: 0;
+        &:not(.inactive) {
+          &:hover {
+            &::after {
+              border-color: #595959;
+            }
+          }
+        }
+      }
+
+      &.inactive {
+        cursor: not-allowed;
+
+        &::after {
+          border-color: #E2E2E2;
+        }
       }
     }
   }

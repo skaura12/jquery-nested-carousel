@@ -33,6 +33,7 @@
             }
             self.$ele.find(".ns-horizontal-timeline").addClass(self.options.mode+"-mode");
             selectedOuterNode = self.$ele.find(".list .outer-node.selected");
+            selectedOuterNode.addClass("center");
             selectedInnerNode = selectedOuterNode.find(".inner-node.selected");
             selectedOuterNode.find("div.active").attr("title",selectedInnerNode.find("a").data('content'));
             selectedOuterNode.find("div.active > p").text(selectedInnerNode.find("a").data('content'));
@@ -54,7 +55,7 @@
                 var innerList = $("<ul class='inner-nodes-container'></ul>");
                 outerNode.list.forEach(function(innerNode){
                     var anchorNode = $("<a href='#0'></a>");
-                    anchorNode.attr("title",(innerNode.name)?(innerNode.name):"");
+                    anchorNode.attr("title",(innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"");
                     anchorNode.data("content", (innerNode.name)?(innerNode.name):"").attr("data-id", innerNode.id);
                     anchorNode.addClass("state-"+innerNode.state);
                     $("<li class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>").append(anchorNode).appendTo(innerList);
@@ -64,11 +65,25 @@
 
             template.find(".list").append(outerList);
             //append navigation buttons
-            template.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'>Prev</a></li> <li><a href='#0' class='next' title='Next'>Next</a></li></ul>");
+            template.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'>Prev</a><i class='fa fa-arrow-circle-left move-left' aria-hidden='true'></i></li> <li><a href='#0' class='next' title='Next'>Next</a><i class='move-right fa fa-arrow-circle-right' aria-hidden='true'></i></li></ul>");
             template.appendTo(self.$ele);
         },
         _attachEvents: function(){
             var self = this;
+            self.$ele.find(".ns-timeline-navigation .move-right").on("click",function(event){
+                if(self.$ele.find(".outer-node.center").next().length){
+                    self.$ele.find(".outer-node.center").removeClass("center").next().addClass("center");
+                    self._updateSlider();
+                }
+            });
+
+            self.$ele.find(".ns-timeline-navigation .move-left").on("click",function(event){
+                if(self.$ele.find(".outer-node.center").prev().length){
+                    self.$ele.find(".outer-node.center").removeClass("center").prev().addClass("center");
+                    self._updateSlider();
+                }
+            });
+
 
             self.$ele.find(".ns-timeline-navigation a.prev").on("click",function(event){
                 event.preventDefault();
@@ -102,6 +117,10 @@
                     //when wrapper list item is not selected
                     self.$ele.find(".outer-node.selected").removeClass("selected");
                     wrapperListItem.addClass("selected");
+                }
+                if(!wrapperListItem.hasClass("center")){
+                    self.$ele.find(".outer-node.center").removeClass("center");
+                    wrapperListItem.addClass("center");
                     if(self.options.mode === "nested"){
                         self._updateSlider();
                     }
@@ -137,8 +156,8 @@
                 currentTranslateValue,
                 translation;
 
-            destinationXOffset = self.$ele.find(".list").offset().left + self.containerWidth/2 - self.$ele.find("ol > li.selected").outerWidth()/2;
-            sourceXOffset = self.$ele.find("ol li.selected").offset().left;
+            destinationXOffset = self.$ele.find(".list").offset().left + self.containerWidth/2 - self.$ele.find("ol > li.center").outerWidth()/2;
+            sourceXOffset = self.$ele.find("ol li.center").offset().left;
             translation = destinationXOffset - sourceXOffset;
             currentTranslateValue = getTranslateValue(self.$ele.find(".list ol"));
             self.$ele.find(".list .outer-nodes-container").css("transform", "translate3d(" + (currentTranslateValue + translation) + "px,0px,0px)");
