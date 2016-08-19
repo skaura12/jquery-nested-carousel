@@ -138,27 +138,41 @@
           & > .inner-node {
             display: inline-block;
             & > a {
+
+              content: '';
+              border: 2px solid gray;
+              border-radius: 50%;
+              height: 6px;
+              width: 6px;
+              display: inline-block;
+              position: relative;
+              margin: 6px 10px;
+              z-index: 2;
               &::after {
                 content: '';
-                border: 2px solid gray;
+                border: 1px solid gray;
                 border-radius: 50%;
-                height: 6px;
-                width: 6px;
+                height: 15px;
+                width: 15px;
                 display: inline-block;
-                margin: 6px 10px;
+                position: absolute;
+                @include center(xy);
+                background: transparent;
+                z-index: 1;
+                visibility: hidden;
               }
               &:hover{
                 &::after {
-                  background-color: $color-2 !important;
+                  visibility: visible;
                 }
               }
               @each $state, $color in $state-colors {
-                &.#{$state}::after {
+                &.#{$state} {
                   background-color: $color;
                 }
               }
             }
-            &.selected > a::after {
+            &.selected > a {
               background-color: $color-2;
             }
           }
@@ -223,7 +237,7 @@
       width: 20px;
       left: 50%;
       top: 50%;
-      border: 3px solid rgb(89,89,89);
+      border: 3px solid #bfbfbf;
       border-top: none;
       border-right: none;
       @include transform(translateX(-50%) translateY(-50%) rotate(225deg));
@@ -232,10 +246,24 @@
     &.prev {
       left: 0;
       @include transform(translateY(-50%) rotate(180deg));
+      &:not(.inactive) {
+        &:hover {
+          &::after {
+            border-color: #595959;
+          }
+        }
+      }
     }
 
     &.next {
       right: 0;
+      &:not(.inactive) {
+        &:hover {
+          &::after {
+            border-color: #595959;
+          }
+        }
+      }
     }
 
 

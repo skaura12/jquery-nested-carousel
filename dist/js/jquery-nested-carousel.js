@@ -34,6 +34,7 @@
             self.$ele.find(".ns-horizontal-timeline").addClass(self.options.mode+"-mode");
             selectedOuterNode = self.$ele.find(".list .outer-node.selected");
             selectedInnerNode = selectedOuterNode.find(".inner-node.selected");
+            selectedOuterNode.find("div.active").attr("title",selectedInnerNode.find("a").data('content'));
             selectedOuterNode.find("div.active > p").text(selectedInnerNode.find("a").data('content'));
             self.totalContentWidth = 0;
             self.$ele.find(".list > ol >li").each(function(){
@@ -53,6 +54,7 @@
                 var innerList = $("<ul class='inner-nodes-container'></ul>");
                 outerNode.list.forEach(function(innerNode){
                     var anchorNode = $("<a href='#0'></a>");
+                    anchorNode.attr("title",(innerNode.name)?(innerNode.name):"");
                     anchorNode.data("content", (innerNode.name)?(innerNode.name):"").attr("data-id", innerNode.id);
                     anchorNode.addClass("state-"+innerNode.state);
                     $("<li class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>").append(anchorNode).appendTo(innerList);
@@ -62,7 +64,7 @@
 
             template.find(".list").append(outerList);
             //append navigation buttons
-            template.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev'>Prev</a></li> <li><a href='#0' class='next'>Next</a></li></ul>");
+            template.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'>Prev</a></li> <li><a href='#0' class='next' title='Next'>Next</a></li></ul>");
             template.appendTo(self.$ele);
         },
         _attachEvents: function(){
@@ -93,7 +95,7 @@
             self.$ele.find(".list .inner-nodes-container").on("click","a",function(event){
                 var innerSelectedName;
                 event.preventDefault();
-                var wrapperListItem = $(event.target).closest(".outer-node");
+                var wrapperListItem = $(event.target).closest(".outer-node"),innerNodeName;
                 self.$ele.find(".outer-node.selected > div.active > p").text("");
                 self.$ele.find(".outer-node.selected .inner-node.selected").removeClass("selected");
                 if(!wrapperListItem.hasClass("selected")){
@@ -104,7 +106,9 @@
                         self._updateSlider();
                     }
                 }
-                wrapperListItem.find("div.active > p").text($(event.target).parent().addClass("selected").end().data("content"));
+                innerNodeName = $(event.target).data("content");
+                $(event.target).parent().addClass("selected");
+                wrapperListItem.find("div.active").attr("title",innerNodeName).find("p").text(innerNodeName);
                 if(self.options.mode === "flattened" && !$(event.target).data("content").length){
                     wrapperListItem.find("div.active > p").text(wrapperListItem.data("name"));
                 }
