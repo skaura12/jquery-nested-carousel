@@ -2217,7 +2217,7 @@
     position: relative; }
 
 .ns-horizontal-timeline.nested-mode .timeline {
-  height: 120px; }
+  height: 130px; }
 
 .ns-horizontal-timeline.nested-mode .outer-nodes-container {
   -webkit-transition: -webkit-transform 0.6s ease;
@@ -2234,8 +2234,7 @@
     border: 1px solid gainsboro; }
     .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node .outer-list-name {
       font-weight: bold;
-      font-size: 14px;
-      height: 38px;
+      height: 40px;
       line-height: 16px;
       overflow: hidden;
       margin: 0 auto;
@@ -2255,15 +2254,18 @@
         vertical-align: middle;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
+        font-size: 14px;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none; }
+        @media all and (max-width: 1600px) {
+          .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node .outer-list-name p {
+            font-size: 12px; } }
     .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node .inner-selected-name {
       color: #4f93be;
       font-weight: bold;
-      font-size: 16px;
-      height: 38px;
+      height: 40px;
       overflow: hidden;
       margin: 0 auto;
       text-overflow: ellipsis;
@@ -2283,10 +2285,14 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         width: inherit;
+        font-size: 16px;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none; }
+        @media all and (max-width: 1600px) {
+          .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node .inner-selected-name p {
+            font-size: 14px; } }
     .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node:not(.selected) {
       opacity: 0.4;
       margin: 0 10px;
@@ -2301,7 +2307,7 @@
       -webkit-transition: -webkit-transform 0.6s ease 0.1s;
       -moz-transition: -moz-transform 0.6s ease 0.1s;
       transition: transform 0.6s ease 0.1s;
-      height: 110px;
+      height: 120px;
       margin: 5px 10px;
       transform: scale(1.08); }
     .ns-horizontal-timeline.nested-mode .outer-nodes-container > .outer-node > .inner-nodes-container {
