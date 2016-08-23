@@ -96,7 +96,7 @@
                 }
             });
 
-            self.$ele.find(".nested-view .ns-timeline-navigation a.next").on("click",function(event){
+            self.$nestedViewContainer.find(".ns-timeline-navigation a.next").on("click",function(event){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.center").next().length){
                     self.$nestedViewContainer.find(".outer-node.center").removeClass("center").next().addClass("center");
@@ -138,42 +138,27 @@
                         }
                     });
                 }
+                self.$flattenedViewContainer.find(".outer-node.selected").removeClass("selected").find(".inner-node.selected").removeClass("selected");
+                self.$flattenedViewContainer.find(".outer-node[data-id = '"+wrapperListItem.data("id")+"']").addClass("selected").find(".inner-node[data-id = '"+$(event.target).data("id")+"']").addClass("selected");
                 event.stopPropagation();
             });
 
-            self.$ele.find(".flattened-view .ns-timeline-navigation a.prev").on("click",function(){
+            self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(){
                 event.preventDefault();
-                if(self.$ele.find(".flattened-view .outer-node.selected .inner-node.selected").prev().length){
-                    self.$ele
-                        .find(".flattened-view .outer-node.selected .inner-node.selected")
-                        .removeClass("selected")
-                        .prev()
-                        .addClass("selected");
-                }else if(self.$ele.find(".flattened-view .outer-node.selected").prev().length){
-                    self.$ele
-                        .find(".flattened-view .outer-node.selected")
-                        .removeClass("selected")
-                        .find(".inner-node.selected")
-                        .removeClass("selected")
-                        .end()
-                        .prev().addClass("selected").find(".inner-node").last().addClass("selected");
+                if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().length){
+                    self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().find("a").trigger("click");
+                }else if(self.$nestedViewContainer.find(".outer-node.selected").prev().length){
+                    self.$nestedViewContainer.find(".outer-node.selected").prev().find(".inner-node").last().find("a").trigger("click");
                 }
             });
 
 
-            self.$ele.find(".flattened-view .ns-timeline-navigation a.next").on("click",function(){
+            self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").on("click",function(){
                 event.preventDefault();
-                if(self.$ele.find(".flattened-view .outer-node.selected .inner-node.selected").next().length){
-                    self.$ele.find(".flattened-view .outer-node.selected .inner-node.selected").removeClass("selected").next().addClass("selected");
-                    //self.$ele.find(".outer-node.selected .inner-node.selected").next().find("a").trigger("click");
-                }else if(self.$ele.find(".flattened-view .outer-node.selected").next().length){
-                    self.$ele
-                        .find(".flattened-view .outer-node.selected")
-                        .removeClass("selected")
-                        .find(".inner-node.selected")
-                        .removeClass("selected")
-                        .end()
-                        .next().addClass("selected").find(".inner-node").first().addClass("selected");
+                if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().length){
+                    self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().find("a").trigger("click");
+                }else if(self.$nestedViewContainer.find(".outer-node.selected").next().length){
+                    self.$nestedViewContainer.find(".outer-node.selected").next().find(".inner-node").first().find("a").trigger("click");
                 }
             });
 
