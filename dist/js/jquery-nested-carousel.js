@@ -28,17 +28,16 @@
             var self = this,
                 selectedOuterNode,selectedInnerNode;
             self._buildTemplate();
-            if(self.options.mode === "nested"){
-                self._setNameContainerWidth();
-            }
-            self.$ele.find(".ns-horizontal-timeline").addClass(self.options.mode+"-mode");
-            selectedOuterNode = self.$ele.find(".list .outer-node.selected");
+            self.$flattenedViewContainer = self.$ele.find(".flattened-view");
+            self.$nestedViewContainer = self.$ele.find(".nested-view");
+            self._setNameContainerWidth();
+            selectedOuterNode = self.$nestedViewContainer.find(".list .outer-node.selected");
             selectedOuterNode.addClass("center");
             selectedInnerNode = selectedOuterNode.find(".inner-node.selected");
             selectedOuterNode.find("div.active").attr("title",selectedInnerNode.find("a").data('content'));
             selectedOuterNode.find("div.active > p").text(selectedInnerNode.find("a").data('content'));
             self.totalContentWidth = 0;
-            self.$ele.find(".list > ol >li").each(function(){
+            self.$nestedViewContainer.find(".list > ol >li").each(function(){
                 self.totalContentWidth = self.totalContentWidth + $(this).outerWidth();
             });
             self.containerWidth = self.$ele.find(".list").outerWidth();
@@ -48,101 +47,134 @@
         _buildTemplate: function(){
             //readability
             var self = this,
-                template = $("<section class='nested-mode ns-horizontal-timeline'><div class='timeline'> <div class='list-wrapper'> <div class='list'></div></div></section>"),
-                outerList = $("<ol class='outer-nodes-container'></ol>");
-
+                nestedViewTemplate = $("<section class='nested-view'><div class='timeline'> <div class='list-wrapper'> <div class='list'></div></div></section>"),
+                flattenedViewTemplate  = $("<section class='flattened-view'><div class='timeline'> <div class='list-wrapper'> <div class='list'></div></div></div></section>"),
+                outerList = $("<ol class='outer-nodes-container'></ol>"),
+                flattenedOuterList = $("<ol class='outer-nodes-container'></ol>");
+            self.$ele.addClass("ns-horizontal-timeline");
             self.options.data.forEach(function(outerNode){
-                var innerList = $("<ul class='inner-nodes-container'></ul>");
+                var innerList = $("<ul class='inner-nodes-container'></ul>"),
+                    flattenedInnerList = $("<ul class='inner-nodes-container'></ul>");
+
                 outerNode.list.forEach(function(innerNode){
-                    var anchorNode = $("<a href='#0'></a>");
+                    var anchorNode = $("<a href='#0'></a>"),
+                        flattenedNode;
+
                     anchorNode.attr("title",(innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"");
                     anchorNode.data("content", (innerNode.name)?(innerNode.name):"").attr("data-id", innerNode.id);
                     anchorNode.addClass("state-"+innerNode.state);
                     $("<li class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>").append(anchorNode).appendTo(innerList);
+
+                    flattenedNode = $("<li class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>");
+                    flattenedNode.text((innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"");
+                    flattenedNode.attr("title",(innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"");
+                    flattenedNode.data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id);
+                    flattenedInnerList.append(flattenedNode);
+                    flattenedViewTemplate.find(".nodes-container").append(flattenedNode);
                 });
                 $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"' data-id='"+outerNode.id+"' data-name='"+outerNode.name+"'><div class='outer-list-name'><p>"+outerNode.name+"</p></div></li>").append(innerList).append("<div class='inner-selected-name active'><p></p></div>").appendTo(outerList);
+                $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"' data-id='"+outerNode.id+"' data-name='"+outerNode.name+"'></li>").append(flattenedInnerList).appendTo(flattenedOuterList);
             });
 
-            template.find(".list").append(outerList);
+            nestedViewTemplate.find(".list").append(outerList);
+            flattenedViewTemplate.find(".list").append(flattenedOuterList);
             //append navigation buttons
-            template.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'>Prev</a><i class='fa fa-arrow-circle-left move-left' aria-hidden='true'></i></li> <li><a href='#0' class='next' title='Next'>Next</a><i class='move-right fa fa-arrow-circle-right' aria-hidden='true'></i></li></ul>");
-            template.appendTo(self.$ele);
+            nestedViewTemplate.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'>Prev</a></li> <li><a href='#0' class='next' title='Next'>Next</a></li></ul>");
+            nestedViewTemplate.appendTo(self.$ele);
+            flattenedViewTemplate.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'>Prev</a></li> <li><a href='#0' class='next' title='Next'>Next</a></li></ul>");
+            flattenedViewTemplate.appendTo(self.$ele);
         },
         _attachEvents: function(){
             var self = this;
-            self.$ele.find(".ns-timeline-navigation .move-right").on("click",function(event){
-                if(self.$ele.find(".outer-node.center").next().length){
-                    self.$ele.find(".outer-node.center").removeClass("center").next().addClass("center");
-                    self._updateSlider();
-                }
-            });
 
-            self.$ele.find(".ns-timeline-navigation .move-left").on("click",function(event){
-                if(self.$ele.find(".outer-node.center").prev().length){
+
+            self.$nestedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(event){
+                event.preventDefault();
+                if(self.$nestedViewContainer.find(".outer-node.center").prev().length){
                     self.$ele.find(".outer-node.center").removeClass("center").prev().addClass("center");
                     self._updateSlider();
                 }
             });
 
-
-            self.$ele.find(".ns-timeline-navigation a.prev").on("click",function(event){
+            self.$ele.find(".nested-view .ns-timeline-navigation a.next").on("click",function(event){
                 event.preventDefault();
-                if(self.$ele.find(".outer-node.selected .inner-node.selected").prev().length){
-                    self.$ele.find(".outer-node.selected .inner-node.selected").prev().find("a").trigger("click");
-                }else if(self.$ele.find(".outer-node.selected").prev().length){
-                    self.$ele.find(".outer-node.selected").prev().find(".inner-node").last().find("a").trigger("click");
+                if(self.$nestedViewContainer.find(".outer-node.center").next().length){
+                    self.$nestedViewContainer.find(".outer-node.center").removeClass("center").next().addClass("center");
+                    self._updateSlider();
                 }
             });
 
-            self.$ele.find(".ns-timeline-navigation a.next").on("click",function(event){
-                event.preventDefault();
-                if(self.$ele.find(".outer-node.selected .inner-node.selected").next().length){
-                    self.$ele.find(".outer-node.selected .inner-node.selected").next().find("a").trigger("click");
-                }else if(self.$ele.find(".outer-node.selected").next().length){
-                    self.$ele.find(".outer-node.selected").next().find(".inner-node").first().find("a").trigger("click");
-                }
-            });
-
-            self.$ele.find(".list .outer-nodes-container").on("click",".outer-node:not('.selected')",function(event){
+            self.$nestedViewContainer.find(".list .outer-nodes-container").on("click",".outer-node:not('.selected')",function(event){
                 $($(event.currentTarget).find(".inner-node a")[0]).trigger("click");
             });
 
-            self.$ele.find(".list .inner-nodes-container").on("click","a",function(event){
+            self.$nestedViewContainer.find(".list .inner-nodes-container").on("click","a",function(event){
                 var innerSelectedName;
                 event.preventDefault();
                 var wrapperListItem = $(event.target).closest(".outer-node"),innerNodeName;
-                self.$ele.find(".outer-node.selected > div.active > p").text("");
-                self.$ele.find(".outer-node.selected .inner-node.selected").removeClass("selected");
+                self.$nestedViewContainer.find(".outer-node.selected > div.active > p").text("");
+                self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").removeClass("selected");
                 if(!wrapperListItem.hasClass("selected")){
                     //when wrapper list item is not selected
-                    self.$ele.find(".outer-node.selected").removeClass("selected");
+                    self.$nestedViewContainer.find(".outer-node.selected").removeClass("selected");
                     wrapperListItem.addClass("selected");
                 }
                 if(!wrapperListItem.hasClass("center")){
-                    self.$ele.find(".outer-node.center").removeClass("center");
+                    self.$nestedViewContainer.find(".outer-node.center").removeClass("center");
                     wrapperListItem.addClass("center");
-                    if(self.options.mode === "nested"){
-                        self._updateSlider();
-                    }
+                    self._updateSlider();
                 }
                 innerNodeName = $(event.target).data("content");
                 $(event.target).parent().addClass("selected");
                 wrapperListItem.find("div.active").attr("title",innerNodeName).find("p").text(innerNodeName);
-                if(self.options.mode === "flattened" && !$(event.target).data("content").length){
-                    wrapperListItem.find("div.active > p").text(wrapperListItem.data("name"));
-                }
                 self._updateNavigationButtonState();
                 if(typeof self.options.nodeSwitchCallback === "function") {
                     self.options.nodeSwitchCallback({
-                        id: self.$ele.find(".outer-node.selected").data("id"),
-                        name: self.$ele.find(".outer-node.selected").data("name"),
+                        id: self.$ele.find(".nested-view .outer-node.selected").data("id"),
+                        name: self.$ele.find(".nested-view .outer-node.selected").data("name"),
                         nestedNode: {
-                            id: self.$ele.find(".outer-node.selected .inner-node.selected a").data("id"),
-                            name: self.$ele.find(".outer-node.selected .inner-node.selected a").data("content")
+                            id: self.$ele.find(".nested-view .outer-node.selected .inner-node.selected a").data("id"),
+                            name: self.$ele.find(".nested-view .outer-node.selected .inner-node.selected a").data("content")
                         }
                     });
                 }
                 event.stopPropagation();
+            });
+
+            self.$ele.find(".flattened-view .ns-timeline-navigation a.prev").on("click",function(){
+                event.preventDefault();
+                if(self.$ele.find(".flattened-view .outer-node.selected .inner-node.selected").prev().length){
+                    self.$ele
+                        .find(".flattened-view .outer-node.selected .inner-node.selected")
+                        .removeClass("selected")
+                        .prev()
+                        .addClass("selected");
+                }else if(self.$ele.find(".flattened-view .outer-node.selected").prev().length){
+                    self.$ele
+                        .find(".flattened-view .outer-node.selected")
+                        .removeClass("selected")
+                        .find(".inner-node.selected")
+                        .removeClass("selected")
+                        .end()
+                        .prev().addClass("selected").find(".inner-node").last().addClass("selected");
+                }
+            });
+
+
+            self.$ele.find(".flattened-view .ns-timeline-navigation a.next").on("click",function(){
+                event.preventDefault();
+                if(self.$ele.find(".flattened-view .outer-node.selected .inner-node.selected").next().length){
+                    self.$ele.find(".flattened-view .outer-node.selected .inner-node.selected").removeClass("selected").next().addClass("selected");
+                    //self.$ele.find(".outer-node.selected .inner-node.selected").next().find("a").trigger("click");
+                }else if(self.$ele.find(".flattened-view .outer-node.selected").next().length){
+                    self.$ele
+                        .find(".flattened-view .outer-node.selected")
+                        .removeClass("selected")
+                        .find(".inner-node.selected")
+                        .removeClass("selected")
+                        .end()
+                        .next().addClass("selected").find(".inner-node").first().addClass("selected");
+                }
             });
 
             $(window).on("resize",function(event){
@@ -156,18 +188,18 @@
                 currentTranslateValue,
                 translation;
 
-            destinationXOffset = self.$ele.find(".list").offset().left + self.containerWidth/2 - self.$ele.find("ol > li.center").outerWidth()/2;
-            sourceXOffset = self.$ele.find("ol li.center").offset().left;
+            destinationXOffset = self.$nestedViewContainer.find(".list").offset().left + self.containerWidth/2 - self.$nestedViewContainer.find("ol > li.center").outerWidth()/2;
+            sourceXOffset = self.$nestedViewContainer.find("ol li.center").offset().left;
             translation = destinationXOffset - sourceXOffset;
-            currentTranslateValue = getTranslateValue(self.$ele.find(".list ol"));
-            self.$ele.find(".list .outer-nodes-container").css("transform", "translate3d(" + (currentTranslateValue + translation) + "px,0px,0px)");
+            currentTranslateValue = getTranslateValue(self.$nestedViewContainer.find(".list ol"));
+            self.$nestedViewContainer.find(".list .outer-nodes-container").css("transform", "translate3d(" + (currentTranslateValue + translation) + "px,0px,0px)");
         },
         _setNameContainerWidth: function(){
             var self = this,
-                outerList = self.$ele.find(".list ol > li");
+                outerList = self.$nestedViewContainer.find(".list .outer-nodes-container .outer-node");
             outerList.each(function(){
                 var innerListWidth = 0,outerNode = $(this);
-                outerNode.find("ul > li").each(function(){
+                outerNode.find(".inner-node").each(function(){
                     var innerNode = $(this);
                     innerListWidth += innerNode.outerWidth();
                 });
@@ -181,7 +213,7 @@
             })
         },
         _resetNestedNameContainerWidth: function(){
-            this.$ele.find(".list .inner-selected-name").css("width","100%");
+            this.$nestedViewContainer.find(".list .inner-selected-name").css("width","100%");
         },
         _updateNavigationButtonState: function(){
             var self = this;

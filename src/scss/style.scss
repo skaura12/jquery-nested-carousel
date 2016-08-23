@@ -44,7 +44,7 @@
       }
     }
   }
-  &.nested-mode {
+  .nested-view {
     .timeline{
       height: 130px;
     }
@@ -189,35 +189,30 @@
     }
   }
 
-  &.flattened-mode {
+  .flattened-view {
     .timeline{
       height: 50px;
     }
     .outer-nodes-container {
-      transform: none !important;
       padding: 0 20px;
       .outer-node {
         border: none;
-        .outer-list-name {
-          @include hidden;
-        }
-        .inner-nodes-container {
-          @include hidden;
-        }
         &:not(.selected) {
           @include hidden;
         }
         &.selected {
-          background-color: transparent;
-          .inner-selected-name {
-            font-size: 16px;
-            p{
+          .inner-nodes-container{
+            .inner-node{
+              font-size: 16px;
               color: $color-2;
               line-height: 50px; //should match the height in order to vertically center the content
               text-align: center;
               text-overflow: ellipsis;
               white-space: nowrap;
               overflow: hidden;
+              &:not(.selected) {
+                @include hidden;
+              }
             }
           }
         }
