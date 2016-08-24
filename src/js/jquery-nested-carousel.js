@@ -34,8 +34,6 @@
             selectedOuterNode = self.$nestedViewContainer.find(".list .outer-node.selected");
             selectedOuterNode.addClass("center");
             selectedInnerNode = selectedOuterNode.find(".inner-node.selected");
-            selectedOuterNode.find("div.active").attr("title",selectedInnerNode.find("a").data('content'));
-            selectedOuterNode.find("div.active > p").text(selectedInnerNode.find("a").data('content'));
             self.totalContentWidth = 0;
             self.$nestedViewContainer.find(".list > ol >li").each(function(){
                 self.totalContentWidth = self.totalContentWidth + $(this).outerWidth();
@@ -72,7 +70,7 @@
                     flattenedInnerList.append(flattenedNode);
                     flattenedViewTemplate.find(".nodes-container").append(flattenedNode);
                 });
-                $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"' data-id='"+outerNode.id+"' data-name='"+outerNode.name+"'><div class='outer-list-name'><p>"+outerNode.name+"</p></div></li>").append(innerList).append("<div class='inner-selected-name active'><p></p></div>").appendTo(outerList);
+                $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"' data-id='"+outerNode.id+"' data-name='"+outerNode.name+"'><div class='outer-list-name'><p>"+outerNode.name+"</p></div></li>").append(innerList).appendTo(outerList);
                 $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"' data-id='"+outerNode.id+"' data-name='"+outerNode.name+"'></li>").append(flattenedInnerList).appendTo(flattenedOuterList);
             });
 
@@ -93,6 +91,7 @@
                 if(self.$nestedViewContainer.find(".outer-node.center").prev().length){
                     self.$ele.find(".outer-node.center").removeClass("center").prev().addClass("center");
                     self._updateSlider();
+                    self._updateNestedViewButtonState();
                 }
             });
 
@@ -101,6 +100,7 @@
                 if(self.$nestedViewContainer.find(".outer-node.center").next().length){
                     self.$nestedViewContainer.find(".outer-node.center").removeClass("center").next().addClass("center");
                     self._updateSlider();
+                    self._updateNestedViewButtonState();
                 }
             });
 
@@ -112,7 +112,6 @@
                 var innerSelectedName;
                 event.preventDefault();
                 var wrapperListItem = $(event.target).closest(".outer-node"),innerNodeName;
-                self.$nestedViewContainer.find(".outer-node.selected > div.active > p").text("");
                 self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").removeClass("selected");
                 if(!wrapperListItem.hasClass("selected")){
                     //when wrapper list item is not selected
@@ -126,8 +125,6 @@
                 }
                 innerNodeName = $(event.target).data("content");
                 $(event.target).parent().addClass("selected");
-                wrapperListItem.find("div.active").attr("title",innerNodeName).find("p").text(innerNodeName);
-                self._updateNavigationButtonState();
                 if(typeof self.options.nodeSwitchCallback === "function") {
                     self.options.nodeSwitchCallback({
                         id: self.$ele.find(".nested-view .outer-node.selected").data("id"),
@@ -140,6 +137,8 @@
                 }
                 self.$flattenedViewContainer.find(".outer-node.selected").removeClass("selected").find(".inner-node.selected").removeClass("selected");
                 self.$flattenedViewContainer.find(".outer-node[data-id = '"+wrapperListItem.data("id")+"']").addClass("selected").find(".inner-node[data-id = '"+$(event.target).data("id")+"']").addClass("selected");
+                self._updateNestedViewButtonState();
+                self._updateFlattenedViewButtonState();
                 event.stopPropagation();
             });
 
@@ -190,28 +189,36 @@
                 });
                 if(innerListWidth > 300){
                     outerNode.find(".outer-list-name").css("width",innerListWidth);
-                    outerNode.find(".inner-selected-name").css("width",innerListWidth);
                 }else{
                     outerNode.find(".outer-list-name").css("width",300);
-                    outerNode.find(".inner-selected-name").css("width",300);
                 }
             })
         },
-        _resetNestedNameContainerWidth: function(){
-            this.$nestedViewContainer.find(".list .inner-selected-name").css("width","100%");
-        },
-        _updateNavigationButtonState: function(){
+        _updateNestedViewButtonState: function(){
             var self = this;
-            if(!self.$ele.find(".outer-node.selected .inner-node.selected").next().length && !self.$ele.find(".outer-node.selected").next().length){
-                self.$ele.find(".ns-timeline-navigation a.next").addClass("inactive");
+            if(!self.$nestedViewContainer.find(".outer-node.center").next().length){
+                self.$nestedViewContainer.find(".ns-timeline-navigation a.next").addClass("inactive");
             }else{
-                self.$ele.find(".ns-timeline-navigation a.next").removeClass("inactive");
+                self.$nestedViewContainer.find(".ns-timeline-navigation a.next").removeClass("inactive");
+            }
+            if(!self.$nestedViewContainer.find(".outer-node.center").prev().length){
+                self.$nestedViewContainer.find(".ns-timeline-navigation a.prev").addClass("inactive");
+            }else{
+                self.$nestedViewContainer.find(".ns-timeline-navigation a.prev").removeClass("inactive");
+            }
+        },
+        _updateFlattenedViewButtonState: function(){
+            var self = this;
+            if(!self.$flattenedViewContainer.find(".outer-node.selected .inner-node.selected").next().length && !self.$flattenedViewContainer.find(".outer-node.selected").next().length){
+                self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").addClass("inactive");
+            }else{
+                self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").removeClass("inactive");
             }
 
-            if(!self.$ele.find(".outer-node.selected .inner-node.selected").prev().length && !self.$ele.find(".outer-node.selected").prev().length){
-                self.$ele.find(".ns-timeline-navigation a.prev").addClass("inactive");
+            if(!self.$flattenedViewContainer.find(".outer-node.selected .inner-node.selected").prev().length && !self.$flattenedViewContainer.find(".outer-node.selected").prev().length){
+                self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").addClass("inactive");
             }else{
-                self.$ele.find(".ns-timeline-navigation a.prev").removeClass("inactive");
+                self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").removeClass("inactive");
             }
         },
         changeState: function(nodeData){
@@ -229,9 +236,7 @@
             //recalculate the available width
             self.containerWidth = self.$ele.find(".list").outerWidth();
             //update slider position
-            if(self.options.mode === "nested"){
-                self._updateSlider();
-            }
+            self._updateSlider();
         },
         destroy: function(){
             this.$ele.empty();
@@ -239,42 +244,7 @@
         },
         selectNode: function(nodeData){
             this.$ele.find(".outer-node[data-id = '"+nodeData.id+"'] .inner-node a[data-id = '"+nodeData.nestedNode.id+"']").trigger("click");
-        },
-        switchMode: function(mode){
-            if(this.options.mode != mode){
-                if(mode === "nested"){
-                    this.options.mode = mode;
-                    this._setNameContainerWidth();
-                    this.$ele.find(".ns-horizontal-timeline").removeClass("nested-mode flattened-mode").addClass(mode+"-mode");
-                    this.$ele.find(".outer-node.selected .inner-selected-name > p").text(this.$ele.find(".outer-node.selected .inner-node.selected a").data("content"));
-                    this._updateSlider();
-                }else if(mode === "flattened"){
-                    this.options.mode = mode;
-                    this._resetNestedNameContainerWidth();
-                    this.$ele.find(".ns-horizontal-timeline").removeClass("nested-mode flattened-mode").addClass(mode+"-mode");
-                    if(!this.$ele.find(".outer-node.selected .inner-node.selected a").data("content").length){
-                        this.$ele.find(".outer-node.selected .inner-selected-name > p").text(this.$ele.find(".outer-node.selected").data("name"));
-                    }
-                }
-            }
         }
-
-/*      _hideOverflowListItems: function(){
-            var self = this,
-                outerlist = self.$ele.find(".outer-node"),
-                xlowerBound = self.$ele.find(".list").offset().left,
-                xUpperBound = self.$ele.find(".list").offset().left + self.containerWidth;
-
-            outerlist.each(function(){
-                if($(this).offset().left < xlowerBound){
-                    $(this).addClass("hidden");
-                }else if(($(this).offset().left + $(this).outerWidth())> xUpperBound){
-                    $(this).addClass("hidden");
-                }else{
-                    $(this).removeClass("hidden");
-                }
-            });
-        }*/
     };
     $.fn[pluginName] = function(options){
         var args = arguments;
@@ -299,7 +269,5 @@
             return returns !== undefined ? returns : this;
         }
     };
-    $.fn[pluginName].defaults = {
-        "mode": "nested"
-    };
+    $.fn[pluginName].defaults = {};
 })(jQuery);
