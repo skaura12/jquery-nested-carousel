@@ -46,6 +46,7 @@
   .popover {
     .popover-content {
       margin: 5px;
+      text-align: center;
     }
   }
   .nested-view {
@@ -120,6 +121,9 @@
           & > .inner-node {
             display: inline-block;
             vertical-align: middle;
+            padding: 5px;
+            cursor: pointer;
+            margin: 0 5px;
             & > a {
               content: '';
               border: 2px solid gray;
@@ -128,7 +132,6 @@
               width: 6px;
               display: inline-block;
               position: relative;
-              margin: 6px 10px;
               z-index: 2;
               &::after {
                 content: '';

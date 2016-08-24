@@ -43,7 +43,8 @@
             self._updateSlider();
             self.$ele.find('[data-toggle="popover"]').popover({
                 "trigger": "hover",
-                template: '<div class="popover popover-dark"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+                "container": ".ns-horizontal-timeline",
+                template: '<div class="popover popover-dark"><div class="arrow"></div><div class="popover-content"></div></div>'
             });
 
         },
@@ -60,15 +61,13 @@
                     flattenedInnerList = $("<ul class='inner-nodes-container'></ul>");
 
                 outerNode.list.forEach(function(innerNode){
-                    var anchorNode = $("<a href='#0' data-toggle='popover' title='Activity Name' data-placement='top'></a>"),
+                    var anchorNode = $("<a href='#0'></a>"),
                         flattenedNode;
-
-                    //anchorNode.attr("title",(innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"");
-                    anchorNode.data("content", (innerNode.name)?(innerNode.name):"").attr("data-id", innerNode.id);
+                    anchorNode.data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id);
                     anchorNode.addClass("state-"+innerNode.state);
-                    $("<li class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>").append(anchorNode).appendTo(innerList);
+                    $("<li data-toggle='popover' title='Activity Name' data-placement='bottom' class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>").data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id).append(anchorNode).appendTo(innerList);
 
-                    flattenedNode = $("<li class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>").data("content", (innerNode.name)?(innerNode.name):"");
+                    flattenedNode = $("<li  class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>");
                     flattenedNode.text((innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"");
                     flattenedNode.attr("title",(innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"");
                     flattenedNode.data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id);
