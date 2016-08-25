@@ -24,9 +24,11 @@
     margin: 0 60px;
     position: relative; }
 
-.ns-horizontal-timeline .popover .popover-content {
-  margin: 5px;
-  text-align: center; }
+.ns-horizontal-timeline .popover {
+  font-size: 12px; }
+  .ns-horizontal-timeline .popover .popover-content {
+    margin: 5px;
+    text-align: center; }
 
 .ns-horizontal-timeline .nested-view .outer-nodes-container {
   -webkit-transition: -webkit-transform 0.6s ease;
