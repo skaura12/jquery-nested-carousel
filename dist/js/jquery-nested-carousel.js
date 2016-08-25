@@ -44,7 +44,7 @@
             self.$ele.find('[data-toggle="popover"]').popover({
                 "trigger": "hover",
                 "container": ".ns-horizontal-timeline",
-                template: '<div class="popover popover-dark"><div class="arrow"></div><div class="popover-content"></div></div>'
+                template: '<div class="popover"><div class="arrow"></div><div class="popover-content"></div></div>'
             });
 
         },
