@@ -43,8 +43,8 @@
             self._updateSlider();
             self.$ele.find('[data-toggle="popover"]').popover({
                 "trigger": "hover",
-                "container": ".ns-horizontal-timeline",
-                template: '<div class="popover"><div class="arrow"></div><div class="popover-content"></div></div>'
+                "container": "body",
+                template: '<div class="nested-node-popover popover"><div class="arrow"></div><div class="popover-content"></div></div>'
             });
 
         },

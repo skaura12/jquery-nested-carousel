@@ -43,22 +43,6 @@
       }
     }
   }
-  .popover {
-    font-size: 12px;
-    &.bottom {
-      .arrow {
-        &:after {
-          border-bottom-color: #2b2e33;
-        }
-      }
-    }
-    .popover-content {
-      padding: 5px;
-      text-align: center;
-      background-color: #2b2e33;
-      color:#ffffff;
-    }
-  }
   .nested-view {
     .outer-nodes-container {
       @include transition(transform 0.6s ease);
@@ -306,5 +290,23 @@
         }
       }
     }
+  }
+}
+
+.nested-node-popover.popover {
+  font-size: 12px;
+  padding: 0px;
+  &.bottom {
+    .arrow {
+      &:after {
+        border-bottom-color: #2b2e33;
+      }
+    }
+  }
+  .popover-content {
+    padding: 5px;
+    text-align: center;
+    background-color: #2b2e33;
+    color:#ffffff;
   }
 }
