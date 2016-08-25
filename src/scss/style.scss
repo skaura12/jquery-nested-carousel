@@ -45,9 +45,18 @@
   }
   .popover {
     font-size: 12px;
+    &.bottom {
+      .arrow {
+        &:after {
+          border-bottom-color: #2b2e33;
+        }
+      }
+    }
     .popover-content {
-      margin: 5px;
+      padding: 5px;
       text-align: center;
+      background-color: #2b2e33;
+      color:#ffffff;
     }
   }
   .nested-view {
@@ -92,7 +101,7 @@
           }
         }
         &:not(.selected) {
-          opacity: 0.4;
+          opacity: 0.6;
           margin: 0 10px;
           cursor: pointer;
           background-color: #E2E2E2;
@@ -100,7 +109,7 @@
             display: none;
           }
           &:hover{
-            opacity: 0.8;
+            opacity: 1;
           }
         }
 
@@ -182,7 +191,7 @@
         &.selected {
           .inner-nodes-container{
             .inner-node{
-              font-size: 16px;
+              font-size: 18px;
               color: $color-2;
               line-height: 50px; //should match the height in order to vertically center the content
               text-align: center;
