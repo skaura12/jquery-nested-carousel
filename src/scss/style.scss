@@ -286,7 +286,7 @@
         cursor: not-allowed;
 
         &::after {
-          border-color: #E2E2E2;
+          border-color: #FFFFFF;
         }
       }
     }
@@ -309,4 +309,23 @@
     background-color: #2b2e33;
     color:#ffffff;
   }
+}
+
+.ns-horizontal-timeline .flattened-view {
+	.ns-timeline-navigation a{
+		width: 0; 
+		height: 0; 
+		border-top: 18px solid transparent;
+		border-bottom: 18px solid transparent;
+		border-left: 22px solid #4f93be;
+		&.inactive{
+		   border-left-color: #E2E2E2; 
+		}
+	}
+	.timeline .list-wrapper .list{
+		margin: 0 35px;
+		.outer-nodes-container{
+			padding: 0;
+		}
+	}
 }
