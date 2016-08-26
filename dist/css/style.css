@@ -239,7 +239,7 @@
   .ns-horizontal-timeline .ns-timeline-navigation a.inactive {
     cursor: not-allowed; }
     .ns-horizontal-timeline .ns-timeline-navigation a.inactive::after {
-      border-color: #E2E2E2; }
+      border-color: #FFFFFF; }
 
 .nested-node-popover.popover {
   font-size: 12px;
@@ -251,3 +251,17 @@
     text-align: center;
     background-color: #2b2e33;
     color: #ffffff; }
+
+.ns-horizontal-timeline .flattened-view .ns-timeline-navigation a {
+  width: 0;
+  height: 0;
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+  border-left: 22px solid #4f93be; }
+  .ns-horizontal-timeline .flattened-view .ns-timeline-navigation a.inactive {
+    border-left-color: #E2E2E2; }
+
+.ns-horizontal-timeline .flattened-view .timeline .list-wrapper .list {
+  margin: 0 35px; }
+  .ns-horizontal-timeline .flattened-view .timeline .list-wrapper .list .outer-nodes-container {
+    padding: 0; }
