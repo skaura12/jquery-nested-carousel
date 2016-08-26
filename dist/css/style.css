@@ -215,7 +215,7 @@
     width: 20px;
     left: 50%;
     top: 50%;
-    border: 3px solid #bfbfbf;
+    border: 3px solid #E2E2E2;
     border-top: none;
     border-right: none;
     -webkit-transform: translateX(-50%) translateY(-50%) rotate(225deg);
@@ -239,7 +239,7 @@
   .ns-horizontal-timeline .ns-timeline-navigation a.inactive {
     cursor: not-allowed; }
     .ns-horizontal-timeline .ns-timeline-navigation a.inactive::after {
-      border-color: #FFFFFF; }
+      border-color: transparent; }
 
 .nested-node-popover.popover {
   font-size: 12px;

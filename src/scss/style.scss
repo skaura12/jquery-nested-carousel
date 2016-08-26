@@ -253,7 +253,7 @@
         width: 20px;
         left: 50%;
         top: 50%;
-        border: 3px solid #bfbfbf;
+        border: 3px solid #E2E2E2;
         border-top: none;
         border-right: none;
         @include transform(translateX(-50%) translateY(-50%) rotate(225deg));
@@ -286,7 +286,7 @@
         cursor: not-allowed;
 
         &::after {
-          border-color: #FFFFFF;
+          border-color: transparent;
         }
       }
     }
