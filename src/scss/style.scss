@@ -48,12 +48,14 @@
       @include transition(transform 0.6s ease);
       position: relative;
       & > .outer-node {
+        background-color: #E2E2E2;
         display: inline-block;
         vertical-align: middle;
         position: relative;
         box-sizing: border-box;
         padding: 5px 10px;
         border: 1px solid rgb(220,220,220);
+        @include transition(transform 0.6s ease 0.1s);
         .outer-list-name {
           font-weight: bold;
           height: 40px;
@@ -88,7 +90,6 @@
           opacity: 0.6;
           margin: 15px 10px;
           cursor: pointer;
-          background-color: #E2E2E2;
           .inner-selected-name {
             display: none;
           }
@@ -96,10 +97,11 @@
             opacity: 1;
           }
         }
-
+        &.highlighted-node{
+          background-color:#fff;
+        } 
         &.selected {
           min-width: 200px;
-          @include transition(transform 0.6s ease 0.1s);
           margin: 5px 40px;
           transform: scale(1.25);
         }

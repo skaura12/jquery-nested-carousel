@@ -33,12 +33,16 @@
             self._setNameContainerWidth();
             selectedOuterNode = self.$nestedViewContainer.find(".list .outer-node.selected");
             selectedOuterNode.addClass("center");
+            selectedOuterNode.addClass("highlighted-node");
             selectedInnerNode = selectedOuterNode.find(".inner-node.selected");
             self.totalContentWidth = 0;
             self.$nestedViewContainer.find(".list > ol >li").each(function(){
                 self.totalContentWidth = self.totalContentWidth + $(this).outerWidth();
             });
             self.containerWidth = self.$ele.find(".list").outerWidth();
+            self.nodeMargin=2*self.$nestedViewContainer.find(".list > ol >li").css('margin-left').replace('px','');
+            self.listContainerWidth=self.totalContentWidth+self.nodeMargin*self.$nestedViewContainer.find(".list > ol >li").length-self.nodeMargin;
+            self.$nestedViewContainer.find(".list .outer-nodes-container").css('width',self.listContainerWidth);
             self._attachEvents();
             self._updateSlider();
             self.$ele.find('[data-toggle="popover"]').popover({
@@ -88,8 +92,8 @@
         },
         _attachEvents: function(){
             var self = this;
-
-
+            var leftEdge= -self.listContainerWidth+self.containerWidth/2+self.$nestedViewContainer.find("ol > li.outer-node").outerWidth()/2+self.nodeMargin/2+self.$nestedViewContainer.find(".list").offset().left;
+            var rightEdge= self.containerWidth-(self.containerWidth/2+self.$nestedViewContainer.find("ol > li.outer-node").outerWidth()/2+self.nodeMargin/2)+self.$nestedViewContainer.find(".list").offset().left;
             self.$nestedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(event){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.center").prev().length){
@@ -107,28 +111,47 @@
                     self._updateNestedViewButtonState();
                 }
             });
-
-            self.$nestedViewContainer.find(".list .outer-nodes-container").on("click",".outer-node:not('.selected')",function(event){
-                $($(event.currentTarget).find(".inner-node a")[0]).trigger("click");
+            var isDragging = false;
+            var mousedown={};
+            self.$nestedViewContainer.find(".list ol.outer-nodes-container")
+            .on('mousedown',".outer-node",function(event) {
+                isDragging = false;
+                mousedown = { x: event.clientX, y: event.clientY };
+            })
+            .on('mousemove',".outer-node",function(event) {
+                 if ( event.clientX !== mousedown.x || event.clientY !== mousedown.y) {
+                     isDragging = true;
+                 }
+            })
+            .on('mouseup',".outer-node",function(event) {
+                var wasDragging = isDragging;
+                isDragging = false;
+                if (!wasDragging) {
+                   if($(event.target).parent().hasClass("inner-node")){
+                    clickOuterNodehandler($(event.target));
+                    }    
+                   else
+                   {
+                    clickOuterNodehandler($($(event.currentTarget).find(".inner-node a")[0]));
+                   }
+                }
             });
-
-            self.$nestedViewContainer.find(".list .inner-nodes-container").on("click","a",function(event){
+            function clickOuterNodehandler(target){
                 var innerSelectedName;
-                event.preventDefault();
-                var wrapperListItem = $(event.target).closest(".outer-node"),innerNodeName;
-                self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").removeClass("selected");
+                var wrapperListItem = target.closest(".outer-node"),innerNodeName;
+                self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").removeClass("selected"); 
                 if(!wrapperListItem.hasClass("selected")){
                     //when wrapper list item is not selected
+                    wrapperListItem.addClass("highlighted-node");
                     self.$nestedViewContainer.find(".outer-node.selected").removeClass("selected");
                     wrapperListItem.addClass("selected");
                 }
-                if(!wrapperListItem.hasClass("center")){
                     self.$nestedViewContainer.find(".outer-node.center").removeClass("center");
                     wrapperListItem.addClass("center");
                     self._updateSlider();
-                }
-                innerNodeName = $(event.target).data("content");
-                $(event.target).parent().addClass("selected");
+             
+                innerNodeName = target.data("content");
+                target.parent().addClass("selected");
                 if(typeof self.options.nodeSwitchCallback === "function") {
                     self.options.nodeSwitchCallback({
                         id: self.$ele.find(".nested-view .outer-node.selected").data("id"),
@@ -140,12 +163,10 @@
                     });
                 }
                 self.$flattenedViewContainer.find(".outer-node.selected").removeClass("selected").find(".inner-node.selected").removeClass("selected");
-                self.$flattenedViewContainer.find(".outer-node[data-id = '"+wrapperListItem.data("id")+"']").addClass("selected").find(".inner-node[data-id = '"+$(event.target).data("id")+"']").addClass("selected");
+                self.$flattenedViewContainer.find(".outer-node[data-id = '"+wrapperListItem.data("id")+"']").addClass("selected").find(".inner-node[data-id = '"+target.data("id")+"']").addClass("selected");
                 self._updateNestedViewButtonState();
                 self._updateFlattenedViewButtonState();
-                event.stopPropagation();
-            });
-
+            }
             self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().length){
@@ -154,8 +175,6 @@
                     self.$nestedViewContainer.find(".outer-node.selected").prev().find(".inner-node").last().find("a").trigger("click");
                 }
             });
-
-
             self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().length){
@@ -164,7 +183,13 @@
                     self.$nestedViewContainer.find(".outer-node.selected").next().find(".inner-node").first().find("a").trigger("click");
                 }
             });
-
+            self.$nestedViewContainer.find(".list ol.outer-nodes-container").draggable({
+                 axis: "x",
+                 containment : [leftEdge,0,rightEdge,0]
+             });
+             self.$nestedViewContainer.find(".list ol.outer-nodes-container").on("webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend",".outer-node.highlighted-node:not('.selected')",function() {
+                     $(this).removeClass('highlighted-node'); 
+            });   
             $(window).on("resize",function(event){
                 self.resize();
             });
