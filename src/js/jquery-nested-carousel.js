@@ -6,7 +6,6 @@
         this.options = $.extend({}, $.fn[pluginName].defaults,options);
         this.init();
     }
-
     function getTranslateValue(obj){
         var translateValue,currentTranslateValue;
 
@@ -22,7 +21,20 @@
         }
         return currentTranslateValue;
     }
-
+    function debounce(wait, immediate) {
+        var timeout;
+        return function(func) {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    }
     Plugin.prototype = {
         init: function(){
             var self = this,
@@ -92,8 +104,8 @@
         },
         _attachEvents: function(){
             var self = this;
-            var leftEdge= -self.listContainerWidth+self.containerWidth/2+self.$nestedViewContainer.find("ol > li.outer-node").outerWidth()/2+self.nodeMargin/2+self.$nestedViewContainer.find(".list").offset().left;
-            var rightEdge= self.containerWidth-(self.containerWidth/2+self.$nestedViewContainer.find("ol > li.outer-node").outerWidth()/2+self.nodeMargin/2)+self.$nestedViewContainer.find(".list").offset().left;
+            self.leftEdge= -self.listContainerWidth+self.containerWidth/2+self.$nestedViewContainer.find("ol > li.outer-node").outerWidth()/2+self.nodeMargin/2+self.$nestedViewContainer.find(".list").offset().left;
+            self.rightEdge= self.containerWidth-(self.containerWidth/2+self.$nestedViewContainer.find("ol > li.outer-node").outerWidth()/2+self.nodeMargin/2)+self.$nestedViewContainer.find(".list").offset().left;
             self.$nestedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(event){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.center").prev().length){
@@ -128,15 +140,15 @@
                 isDragging = false;
                 if (!wasDragging) {
                    if($(event.target).parent().hasClass("inner-node")){
-                    clickOuterNodehandler($(event.target));
+                    clickInnerNodehandler($(event.target));
                     }    
                    else
                    {
-                    clickOuterNodehandler($($(event.currentTarget).find(".inner-node a")[0]));
+                    clickInnerNodehandler($($(event.currentTarget).find(".inner-node a")[0]));
                    }
                 }
             });
-            function clickOuterNodehandler(target){
+            function clickInnerNodehandler(target){
                 var innerSelectedName;
                 var wrapperListItem = target.closest(".outer-node"),innerNodeName;
                 self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").removeClass("selected"); 
@@ -170,25 +182,50 @@
             self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().length){
-                    self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().find("a").trigger("click");
+                    clickInnerNodehandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().find("a"));
+
                 }else if(self.$nestedViewContainer.find(".outer-node.selected").prev().length){
-                    self.$nestedViewContainer.find(".outer-node.selected").prev().find(".inner-node").last().find("a").trigger("click");
+                    clickInnerNodehandler(self.$nestedViewContainer.find(".outer-node.selected").prev().find(".inner-node").last().find("a"));
+
                 }
             });
             self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().length){
-                    self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().find("a").trigger("click");
+                    clickInnerNodehandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().find("a"));
+
                 }else if(self.$nestedViewContainer.find(".outer-node.selected").next().length){
-                    self.$nestedViewContainer.find(".outer-node.selected").next().find(".inner-node").first().find("a").trigger("click");
+                    clickInnerNodehandler(self.$nestedViewContainer.find(".outer-node.selected").next().find(".inner-node").first().find("a"));
                 }
             });
+            self.EfficientDragging=debounce(250);
             self.$nestedViewContainer.find(".list ol.outer-nodes-container").draggable({
                  axis: "x",
-                 containment : [leftEdge,0,rightEdge,0]
+                 containment : [self.leftEdge,0,self.rightEdge,0],
+                 drag: function( event, ui ) {
+                     self.EfficientDragging(function(){
+                         if(ui.offset.left==self.leftEdge){
+                             self.$nestedViewContainer.find(".outer-node.center").removeClass("center");
+                             self.$nestedViewContainer.find(".outer-node").last().addClass("center");
+                             self._updateNestedViewButtonState();
+                         }
+                         else{
+                             if(ui.offset.left==self.rightEdge){
+                                 self.$nestedViewContainer.find(".outer-node.center").removeClass("center");
+                                 self.$nestedViewContainer.find(".outer-node").first().addClass("center");
+                                 self._updateNestedViewButtonState();
+                             }
+                             else{
+                                 self.$nestedViewContainer.find(".outer-node.center").removeClass("center");
+                                 self.$nestedViewContainer.find(".outer-node.selected").addClass("center");
+                                 self._updateNestedViewButtonState(true);
+                             }
+                         }
+                     });
+                }
              });
              self.$nestedViewContainer.find(".list ol.outer-nodes-container").on("webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend",".outer-node.highlighted-node:not('.selected')",function() {
-                     $(this).removeClass('highlighted-node'); 
+                 $(this).removeClass('highlighted-node');
             });   
             $(window).on("resize",function(event){
                 self.resize();
@@ -223,17 +260,24 @@
                 }
             })
         },
-        _updateNestedViewButtonState: function(){
+        _updateNestedViewButtonState: function(enable){
             var self = this;
-            if(!self.$nestedViewContainer.find(".outer-node.center").next().length){
+            var isLeftEnd,isRightEnd;
+            isLeftEnd=isRightEnd=false;
+            if(!self.$nestedViewContainer.find(".outer-node.center").next().length&&!enable){
                 self.$nestedViewContainer.find(".ns-timeline-navigation a.next").addClass("inactive");
+               isRightEnd=true;
             }else{
                 self.$nestedViewContainer.find(".ns-timeline-navigation a.next").removeClass("inactive");
             }
-            if(!self.$nestedViewContainer.find(".outer-node.center").prev().length){
+            if(!self.$nestedViewContainer.find(".outer-node.center").prev().length&&!enable){
                 self.$nestedViewContainer.find(".ns-timeline-navigation a.prev").addClass("inactive");
+                isLeftEnd=true;
             }else{
                 self.$nestedViewContainer.find(".ns-timeline-navigation a.prev").removeClass("inactive");
+            }
+            if(typeof self.options.carouselStateChanged==="function") {
+                self.options.carouselStateChanged(isLeftEnd, isRightEnd);
             }
         },
         _updateFlattenedViewButtonState: function(){
@@ -266,6 +310,9 @@
             self.containerWidth = self.$ele.find(".list").outerWidth();
             //update slider position
             self._updateSlider();
+            self.leftEdge= -self.listContainerWidth+self.containerWidth/2+self.$nestedViewContainer.find("ol > li.outer-node").outerWidth()/2+self.nodeMargin/2+self.$nestedViewContainer.find(".list").offset().left;
+            self.rightEdge= self.containerWidth-(self.containerWidth/2+self.$nestedViewContainer.find("ol > li.outer-node").outerWidth()/2+self.nodeMargin/2)+self.$nestedViewContainer.find(".list").offset().left;
+            self.$nestedViewContainer.find(".list ol.outer-nodes-container").draggable( "option", "containment", [self.leftEdge,0,self.rightEdge,0]);
         },
         destroy: function(){
             this.$ele.empty();

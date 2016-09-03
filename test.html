@@ -382,7 +382,9 @@
                 }
             ]
         });
-        $("#project-carousel").nestedTimeline({"data": carouselData,"mode":"nested","nodeSwitchCallback": function(nodeData){console.log("NodeData",nodeData);}});
+        $("#project-carousel").nestedTimeline({"data": carouselData,"mode":"nested","nodeSwitchCallback": function(nodeData){console.log("NodeData",nodeData);},"carouselStateChanged":function(isLeftEnd,isRightEnd){
+            console.log("leftEnd"+isLeftEnd+"rightEnd"+isRightEnd);
+        }});
     })(jQuery);
 </script>
 </html>
