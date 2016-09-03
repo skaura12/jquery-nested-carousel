@@ -102,6 +102,38 @@
             flattenedViewTemplate.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'>Prev</a></li> <li><a href='#0' class='next' title='Next'>Next</a></li></ul>");
             flattenedViewTemplate.appendTo(self.$ele);
         },
+        _clickInnerNodeHandler:function(target){
+            var self=this;
+            var innerSelectedName;
+            var wrapperListItem = target.closest(".outer-node"),innerNodeName;
+            self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").removeClass("selected");
+            if(!wrapperListItem.hasClass("selected")){
+                //when wrapper list item is not selected
+                wrapperListItem.addClass("highlighted-node");
+                self.$nestedViewContainer.find(".outer-node.selected").removeClass("selected");
+                wrapperListItem.addClass("selected");
+            }
+            self.$nestedViewContainer.find(".outer-node.center").removeClass("center");
+            wrapperListItem.addClass("center");
+            self._updateSlider();
+
+            innerNodeName = target.data("content");
+            target.parent().addClass("selected");
+            if(typeof self.options.nodeSwitchCallback === "function") {
+                self.options.nodeSwitchCallback({
+                    id: self.$ele.find(".nested-view .outer-node.selected").data("id"),
+                    name: self.$ele.find(".nested-view .outer-node.selected").data("name"),
+                    nestedNode: {
+                        id: self.$ele.find(".nested-view .outer-node.selected .inner-node.selected a").data("id"),
+                        name: self.$ele.find(".nested-view .outer-node.selected .inner-node.selected a").data("content")
+                    }
+                });
+            }
+            self.$flattenedViewContainer.find(".outer-node.selected").removeClass("selected").find(".inner-node.selected").removeClass("selected");
+            self.$flattenedViewContainer.find(".outer-node[data-id = '"+wrapperListItem.data("id")+"']").addClass("selected").find(".inner-node[data-id = '"+target.data("id")+"']").addClass("selected");
+            self._updateNestedViewButtonState();
+            self._updateFlattenedViewButtonState();
+        },
         _attachEvents: function(){
             var self = this;
             self.leftEdge= -self.listContainerWidth+self.containerWidth/2+self.$nestedViewContainer.find("ol > li.outer-node").outerWidth()/2+self.nodeMargin/2+self.$nestedViewContainer.find(".list").offset().left;
@@ -140,70 +172,39 @@
                 isDragging = false;
                 if (!wasDragging) {
                    if($(event.target).parent().hasClass("inner-node")){
-                    clickInnerNodehandler($(event.target));
+                    self._clickInnerNodeHandler($(event.target));
                     }    
                    else
                    {
-                    clickInnerNodehandler($($(event.currentTarget).find(".inner-node a")[0]));
+                    self._clickInnerNodeHandler($($(event.currentTarget).find(".inner-node a")[0]));
                    }
                 }
             });
-            function clickInnerNodehandler(target){
-                var innerSelectedName;
-                var wrapperListItem = target.closest(".outer-node"),innerNodeName;
-                self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").removeClass("selected"); 
-                if(!wrapperListItem.hasClass("selected")){
-                    //when wrapper list item is not selected
-                    wrapperListItem.addClass("highlighted-node");
-                    self.$nestedViewContainer.find(".outer-node.selected").removeClass("selected");
-                    wrapperListItem.addClass("selected");
-                }
-                    self.$nestedViewContainer.find(".outer-node.center").removeClass("center");
-                    wrapperListItem.addClass("center");
-                    self._updateSlider();
-             
-                innerNodeName = target.data("content");
-                target.parent().addClass("selected");
-                if(typeof self.options.nodeSwitchCallback === "function") {
-                    self.options.nodeSwitchCallback({
-                        id: self.$ele.find(".nested-view .outer-node.selected").data("id"),
-                        name: self.$ele.find(".nested-view .outer-node.selected").data("name"),
-                        nestedNode: {
-                            id: self.$ele.find(".nested-view .outer-node.selected .inner-node.selected a").data("id"),
-                            name: self.$ele.find(".nested-view .outer-node.selected .inner-node.selected a").data("content")
-                        }
-                    });
-                }
-                self.$flattenedViewContainer.find(".outer-node.selected").removeClass("selected").find(".inner-node.selected").removeClass("selected");
-                self.$flattenedViewContainer.find(".outer-node[data-id = '"+wrapperListItem.data("id")+"']").addClass("selected").find(".inner-node[data-id = '"+target.data("id")+"']").addClass("selected");
-                self._updateNestedViewButtonState();
-                self._updateFlattenedViewButtonState();
-            }
             self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().length){
-                    clickInnerNodehandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().find("a"));
+                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().find("a"));
 
                 }else if(self.$nestedViewContainer.find(".outer-node.selected").prev().length){
-                    clickInnerNodehandler(self.$nestedViewContainer.find(".outer-node.selected").prev().find(".inner-node").last().find("a"));
+                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected").prev().find(".inner-node").last().find("a"));
 
                 }
             });
             self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().length){
-                    clickInnerNodehandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().find("a"));
+                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().find("a"));
 
                 }else if(self.$nestedViewContainer.find(".outer-node.selected").next().length){
-                    clickInnerNodehandler(self.$nestedViewContainer.find(".outer-node.selected").next().find(".inner-node").first().find("a"));
+                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected").next().find(".inner-node").first().find("a"));
                 }
             });
-            self.EfficientDragging=debounce(250);
+            self._efficientDragging=debounce(250);
             self.$nestedViewContainer.find(".list ol.outer-nodes-container").draggable({
                  axis: "x",
                  containment : [self.leftEdge,0,self.rightEdge,0],
                  drag: function( event, ui ) {
-                     self.EfficientDragging(function(){
+                     self._efficientDragging(function(){
                          if(ui.offset.left==self.leftEdge){
                              self.$nestedViewContainer.find(".outer-node.center").removeClass("center");
                              self.$nestedViewContainer.find(".outer-node").last().addClass("center");
@@ -319,7 +320,8 @@
             $.data(this.$ele, 'plugin_' + pluginName, null);
         },
         selectNode: function(nodeData){
-            this.$ele.find(".outer-node[data-id = '"+nodeData.id+"'] .inner-node a[data-id = '"+nodeData.nestedNode.id+"']").trigger("click");
+            var self=this;
+            self._clickInnerNodeHandler(this.$ele.find(".outer-node[data-id = '"+nodeData.id+"'] .inner-node a[data-id = '"+nodeData.nestedNode.id+"']"))
         }
     };
     $.fn[pluginName] = function(options){
