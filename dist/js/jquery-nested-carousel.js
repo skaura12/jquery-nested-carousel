@@ -55,14 +55,18 @@
             self.nodeMargin=2*self.$nestedViewContainer.find(".list > ol >li").css('margin-left').replace('px','');
             self.listContainerWidth=self.totalContentWidth+self.nodeMargin*self.$nestedViewContainer.find(".list > ol >li").length-self.nodeMargin;
             self.$nestedViewContainer.find(".list .outer-nodes-container").css('width',self.listContainerWidth);
+            self.end={
+                left:false,
+                right:false
+            };
             self._attachEvents();
             self._updateSlider();
+            self._updateNestedViewButtonState();
             self.$ele.find('[data-toggle="popover"]').popover({
                 "trigger": "hover",
                 "container": "body",
                 template: '<div class="nested-node-popover popover"><div class="arrow"></div><div class="popover-content"></div></div>'
             });
-
         },
         _buildTemplate: function(){
             //readability
@@ -277,8 +281,12 @@
             }else{
                 self.$nestedViewContainer.find(".ns-timeline-navigation a.prev").removeClass("inactive");
             }
-            if(typeof self.options.carouselStateChanged==="function") {
+            if(typeof self.options.carouselStateChanged==="function"&&(isLeftEnd!=self.end.left||isRightEnd!=self.end.right)) {
                 self.options.carouselStateChanged(isLeftEnd, isRightEnd);
+                self.end={
+                    left:isLeftEnd,
+                    right:isRightEnd
+                };
             }
         },
         _updateFlattenedViewButtonState: function(){
