@@ -184,7 +184,7 @@
                    }
                 }
             });
-            self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(){
+            self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(event){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().length){
                     self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().find("a"));
@@ -194,7 +194,7 @@
 
                 }
             });
-            self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").on("click",function(){
+            self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").on("click",function(event){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().length){
                     self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().find("a"));
