@@ -382,7 +382,8 @@
                 }
             ]
         });
-        $("#project-carousel").nestedTimeline({"data": carouselData,"mode":"nested","nodeSwitchCallback": function(nodeData){console.log("NodeData",nodeData);},"carouselStateChanged":function(isLeftEnd,isRightEnd){
+
+        $("#project-carousel").nestedTimeline({"data": carouselData,"viewNested":false,"viewFlattened": true,"nodeSwitchCallback": function(nodeData){console.log("NodeData",nodeData);},"carouselStateChanged":function(isLeftEnd,isRightEnd){
             console.log("leftEnd"+isLeftEnd+"rightEnd"+isRightEnd);
         }});
     })(jQuery);

@@ -54,7 +54,7 @@
         position: relative;
         box-sizing: border-box;
         padding: 5px 10px;
-        border: 1px solid rgb(220,220,220);
+        border: 1px solid rgb(220, 220, 220);
         @include transition(transform 0.6s ease 0.1s);
         .outer-list-name {
           font-weight: bold;
@@ -80,8 +80,8 @@
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
             font-size: 14px;
-            @media all and (max-width: 1600px){
-                font-size: 12px;
+            @media all and (max-width: 1600px) {
+              font-size: 12px;
             }
             @include user-select(none);
           }
@@ -93,13 +93,13 @@
           .inner-selected-name {
             display: none;
           }
-          &:hover{
+          &:hover {
             opacity: 1;
           }
         }
-        &.highlighted-node{
-          background-color:#fff;
-        } 
+        &.highlighted-node {
+          background-color: #fff;
+        }
         &.selected {
           min-width: 200px;
           margin: 5px 40px;
@@ -154,8 +154,8 @@
             &.selected > a {
               background-color: $color-2;
             }
-            &:not(.selected) > a{
-              &:hover{
+            &:not(.selected) > a {
+              &:hover {
                 &::after {
                   //visibility: visible;
                   border-color: $color-2;
@@ -166,22 +166,115 @@
         }
       }
     }
-
     .ns-timeline-navigation {
       a {
-        height: 40px;
-        width: 60px;
+        /* these are the left/right arrows to navigate the timeline */
+        position: absolute;
+        z-index: 1;
+        @include center(y);
+        height: 34px;
+        width: 34px;
+        /* replace text with an icon */
+        overflow: hidden;
+        color: transparent;
+        text-indent: 100%;
+        white-space: nowrap;
+
         &::after {
-          width: 40px;
-          height: 40px;
+          /* arrow icon */
+          content: '';
+          position: absolute;
+          height: 20px;
+          width: 20px;
+          left: 50%;
+          top: 50%;
+          border: 3px solid #E2E2E2;
+          border-top: none;
+          border-right: none;
+          @include transform(translateX(-50%) translateY(-50%) rotate(225deg));
+        }
+
+        &.prev {
+          left: 0;
+          @include transform(translateY(-50%) rotate(180deg));
+          &:not(.inactive) {
+            &:hover {
+              &::after {
+                border-color: #595959;
+              }
+            }
+          }
+        }
+
+        &.next {
+          right: 0;
+          &:not(.inactive) {
+            &:hover {
+              &::after {
+                border-color: #595959;
+              }
+            }
+          }
+        }
+
+        &.inactive {
+
+          cursor: not-allowed;
+
+          &::after {
+            border-color: transparent;
+          }
         }
       }
     }
   }
 
   .flattened-view {
-    .timeline{
+    .timeline {
       height: 50px;
+      .list-wrapper {
+        display: inline-block;
+        width: 80%;
+        vertical-align: middle;
+        .list {
+          margin: 0 35px;
+          .outer-nodes-container {
+            padding: 0;
+          }
+        }
+      }
+      .ns-timeline-navigation {
+        border-right: 1px dotted gray;
+        display: inline-block;
+        vertical-align: middle;
+        .move-left {
+          position: absolute;
+          top: 0;
+          left: 0;
+          font-size: 20px;
+          cursor: pointer;
+        }
+        .move-right {
+          position: absolute;
+          top: 0;
+          right: 0;
+          font-size: 20px;
+          cursor: pointer;
+        }
+        a {
+          .prev, .next {
+            &.inactive {
+              border-left-color: #E2E2E2;
+            }
+          }
+        }
+        li {
+          display: inline-block;
+          padding-right: 30px;
+          margin-right: 30px;
+          padding: 7px;
+        }
+      }
     }
     .outer-nodes-container {
       padding: 0 20px;
@@ -191,12 +284,11 @@
           @include hidden;
         }
         &.selected {
-          .inner-nodes-container{
-            .inner-node{
+          .inner-nodes-container {
+            .inner-node {
               font-size: 18px;
               color: $color-2;
               line-height: 50px; //should match the height in order to vertically center the content
-              text-align: center;
               text-overflow: ellipsis;
               white-space: nowrap;
               overflow: hidden;
@@ -208,89 +300,53 @@
         }
       }
     }
-    .ns-timeline-navigation {
-      a {
-        height: 34px;
-        width: 34px;
-        &::after {
-          width: 20px;
-          height: 20px;
-        }
-      }
+
+    .btn-nav-right {
+      display: inline-block;
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      border: 2px solid #000000;
+      position: relative;
     }
-  }
-  .ns-timeline-navigation {
-    .move-left {
+    .btn-nav-right::after {
+      content: "";
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-left: 12px solid #000000;
+      border-bottom: 8px solid transparent;
+      border-top: 8px solid transparent;
       position: absolute;
       top: 0;
+      bottom: 0;
       left: 0;
-      font-size: 20px;
-      cursor: pointer;
+      right: 0;
+      margin: auto;
     }
-    .move-right {
+
+    .btn-nav-left {
+      display: inline-block;
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      border: 2px solid #000000;
+      position: relative;
+    }
+    .btn-nav-left::after {
+      content: "";
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-right: 12px solid #000000;
+      border-bottom: 8px solid transparent;
+      border-top: 8px solid transparent;
       position: absolute;
       top: 0;
+      bottom: 0;
+      left: 0;
       right: 0;
-      font-size: 20px;
-      cursor: pointer;
-    }
-    a {
-      /* these are the left/right arrows to navigate the timeline */
-      position: absolute;
-      z-index: 1;
-      @include center(y);
-      height: 34px;
-      width: 34px;
-      /* replace text with an icon */
-      overflow: hidden;
-      color: transparent;
-      text-indent: 100%;
-      white-space: nowrap;
-
-      &::after {
-        /* arrow icon */
-        content: '';
-        position: absolute;
-        height: 20px;
-        width: 20px;
-        left: 50%;
-        top: 50%;
-        border: 3px solid #E2E2E2;
-        border-top: none;
-        border-right: none;
-        @include transform(translateX(-50%) translateY(-50%) rotate(225deg));
-      }
-
-      &.prev {
-        left: 0;
-        @include transform(translateY(-50%) rotate(180deg));
-        &:not(.inactive) {
-          &:hover {
-            &::after {
-              border-color: #595959;
-            }
-          }
-        }
-      }
-
-      &.next {
-        right: 0;
-        &:not(.inactive) {
-          &:hover {
-            &::after {
-              border-color: #595959;
-            }
-          }
-        }
-      }
-
-      &.inactive {
-        cursor: not-allowed;
-
-        &::after {
-          border-color: transparent;
-        }
-      }
+      margin: auto;
     }
   }
 }
@@ -309,25 +365,6 @@
     padding: 5px;
     text-align: center;
     background-color: #2b2e33;
-    color:#ffffff;
+    color: #ffffff;
   }
-}
-
-.ns-horizontal-timeline .flattened-view {
-	.ns-timeline-navigation a{
-		width: 0; 
-		height: 0; 
-		border-top: 18px solid transparent;
-		border-bottom: 18px solid transparent;
-		border-left: 22px solid #4f93be;
-		&.inactive{
-		   border-left-color: #E2E2E2; 
-		}
-	}
-	.timeline .list-wrapper .list{
-		margin: 0 35px;
-		.outer-nodes-container{
-			padding: 0;
-		}
-	}
 }

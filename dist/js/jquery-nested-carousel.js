@@ -67,6 +67,12 @@
                 "container": "body",
                 template: '<div class="nested-node-popover popover"><div class="arrow"></div><div class="popover-content"></div></div>'
             });
+            if(!self.options.viewFlattened){
+                self.$ele.find(".flattened-view").addClass("hidden");
+            }
+            if(!self.options.viewNested){
+                self.$ele.find(".nested-view").addClass("hidden");
+            }
         },
         _buildTemplate: function(){
             //readability
@@ -101,9 +107,9 @@
             nestedViewTemplate.find(".list").append(outerList);
             flattenedViewTemplate.find(".list").append(flattenedOuterList);
             //append navigation buttons
-            nestedViewTemplate.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'>Prev</a></li> <li><a href='#0' class='next' title='Next'>Next</a></li></ul>");
+            nestedViewTemplate.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'></a></li> <li><a href='#0' class='next' title='Next'></a></li></ul>");
             nestedViewTemplate.appendTo(self.$ele);
-            flattenedViewTemplate.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'>Prev</a></li> <li><a href='#0' class='next' title='Next'>Next</a></li></ul>");
+            flattenedViewTemplate.find(".timeline").prepend("<ul class='ns-timeline-navigation'> <li class='prev-btn-item'><a href='#0' class='prev btn-nav-left' title='Previous'></a></li> <li class='next-btn-item'><a href='#0' class='next btn-nav-right' title='Next'></a></li></ul>");
             flattenedViewTemplate.appendTo(self.$ele);
         },
         _clickInnerNodeHandler:function(target){
@@ -184,7 +190,7 @@
                    }
                 }
             });
-            self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(event){
+            self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().length){
                     self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().find("a"));
@@ -194,7 +200,7 @@
 
                 }
             });
-            self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").on("click",function(event){
+            self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().length){
                     self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().find("a"));
@@ -355,5 +361,8 @@
             return returns !== undefined ? returns : this;
         }
     };
-    $.fn[pluginName].defaults = {};
+    $.fn[pluginName].defaults = {
+        "viewNested":true,
+        "viewFlattened": true
+    };
 })(jQuery);
