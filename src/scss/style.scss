@@ -230,77 +230,21 @@
   }
 
   .flattened-view {
-    .timeline {
-      height: 50px;
-      .list-wrapper {
+    height: 50px;
+    .ns-timeline-navigation {
+      .prev-btn-item,.next-btn-item {
         display: inline-block;
-        width: 80%;
-        vertical-align: middle;
-        .list {
-          margin: 0 35px;
-          .outer-nodes-container {
-            padding: 0;
-          }
-        }
-      }
-      .ns-timeline-navigation {
-        border-right: 1px dotted gray;
-        display: inline-block;
-        vertical-align: middle;
-        .move-left {
-          position: absolute;
-          top: 0;
-          left: 0;
-          font-size: 20px;
-          cursor: pointer;
-        }
-        .move-right {
-          position: absolute;
-          top: 0;
-          right: 0;
-          font-size: 20px;
-          cursor: pointer;
-        }
-        a {
-          .prev, .next {
-            &.inactive {
-              border-left-color: #E2E2E2;
-            }
-          }
-        }
-        li {
-          display: inline-block;
-          padding-right: 30px;
-          margin-right: 30px;
-          padding: 7px;
-        }
       }
     }
-    .outer-nodes-container {
-      padding: 0 20px;
-      .outer-node {
-        border: none;
-        &:not(.selected) {
-          @include hidden;
-        }
-        &.selected {
-          .inner-nodes-container {
-            .inner-node {
-              font-size: 18px;
-              color: $color-2;
-              line-height: 50px; //should match the height in order to vertically center the content
-              text-overflow: ellipsis;
-              white-space: nowrap;
-              overflow: hidden;
-              &:not(.selected) {
-                @include hidden;
-              }
-            }
-          }
-        }
-      }
-    }
+    .flattened-node {
+      font-size: 18px;
+      color: $color-2;
+      line-height: 50px; //should match the height in order to vertically center the content
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
 
+    }
     .btn-nav-right {
       display: inline-block;
       height: 30px;

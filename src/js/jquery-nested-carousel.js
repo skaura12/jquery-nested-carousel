@@ -78,13 +78,12 @@
             //readability
             var self = this,
                 nestedViewTemplate = $("<section class='nested-view'><div class='timeline'> <div class='list-wrapper'> <div class='list'></div></div></section>"),
-                flattenedViewTemplate  = $("<section class='flattened-view'><div class='timeline'> <div class='list-wrapper'> <div class='list'></div></div></div></section>"),
-                outerList = $("<ol class='outer-nodes-container'></ol>"),
-                flattenedOuterList = $("<ol class='outer-nodes-container'></ol>");
+                flattenedViewTemplate  = $("<section class='flattened-view'><div class='flattened-node'></div></section>"),
+                outerList = $("<ol class='outer-nodes-container'></ol>");
+
             self.$ele.addClass("ns-horizontal-timeline");
             self.options.data.forEach(function(outerNode){
-                var innerList = $("<ul class='inner-nodes-container'></ul>"),
-                    flattenedInnerList = $("<ul class='inner-nodes-container'></ul>");
+                var innerList = $("<ul class='inner-nodes-container'></ul>");
 
                 outerNode.list.forEach(function(innerNode){
                     var anchorNode = $("<a href='#0'></a>"),
@@ -92,24 +91,18 @@
                     anchorNode.data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id);
                     anchorNode.addClass("state-"+innerNode.state);
                     $("<li data-toggle='popover' title='Activity Name' data-placement='bottom' class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>").data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id).append(anchorNode).appendTo(innerList);
-
-                    flattenedNode = $("<li  class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>");
-                    flattenedNode.text((innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"");
-                    flattenedNode.attr("title",(innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"");
-                    flattenedNode.data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id);
-                    flattenedInnerList.append(flattenedNode);
-                    flattenedViewTemplate.find(".nodes-container").append(flattenedNode);
+                    if(innerNode.selected){
+                        flattenedViewTemplate.find(".flattened-node").text(innerNode.name);
+                    }
                 });
                 $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"' data-id='"+outerNode.id+"' data-name='"+outerNode.name+"'><div class='outer-list-name'><p>"+outerNode.name+"</p></div></li>").append(innerList).appendTo(outerList);
-                $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"' data-id='"+outerNode.id+"' data-name='"+outerNode.name+"'></li>").append(flattenedInnerList).appendTo(flattenedOuterList);
             });
 
             nestedViewTemplate.find(".list").append(outerList);
-            flattenedViewTemplate.find(".list").append(flattenedOuterList);
             //append navigation buttons
             nestedViewTemplate.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'></a></li> <li><a href='#0' class='next' title='Next'></a></li></ul>");
             nestedViewTemplate.appendTo(self.$ele);
-            flattenedViewTemplate.find(".timeline").prepend("<ul class='ns-timeline-navigation'> <li class='prev-btn-item'><a href='#0' class='prev btn-nav-left' title='Previous'></a></li> <li class='next-btn-item'><a href='#0' class='next btn-nav-right' title='Next'></a></li></ul>");
+            flattenedViewTemplate.prepend("<ul class='ns-timeline-navigation'> <li class='prev-btn-item'><a href='#0' class='prev btn-nav-left' title='Previous'></a></li> <li class='next-btn-item'><a href='#0' class='next btn-nav-right' title='Next'></a></li></ul>");
             flattenedViewTemplate.appendTo(self.$ele);
         },
         _clickInnerNodeHandler:function(target){
@@ -139,8 +132,7 @@
                     }
                 });
             }
-            self.$flattenedViewContainer.find(".outer-node.selected").removeClass("selected").find(".inner-node.selected").removeClass("selected");
-            self.$flattenedViewContainer.find(".outer-node[data-id = '"+wrapperListItem.data("id")+"']").addClass("selected").find(".inner-node[data-id = '"+target.data("id")+"']").addClass("selected");
+            self.$flattenedViewContainer.find(".flattened-node").text(innerNodeName);
             self._updateNestedViewButtonState();
             self._updateFlattenedViewButtonState();
         },
@@ -235,7 +227,7 @@
                      });
                 }
              });
-             self.$nestedViewContainer.find(".list ol.outer-nodes-container").on("webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend",".outer-node.highlighted-node:not('.selected')",function() {
+            self.$nestedViewContainer.find(".list ol.outer-nodes-container").on("webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend",".outer-node.highlighted-node:not('.selected')",function() {
                  $(this).removeClass('highlighted-node');
             });   
             $(window).on("resize",function(event){
