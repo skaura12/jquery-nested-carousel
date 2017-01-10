@@ -200,7 +200,7 @@
   .ns-horizontal-timeline .flattened-view .ns-timeline-navigation {
     position: absolute;
     height: 50px;
-    border-right: 2px dotted gainsboro;
+    border-right: 1px solid gainsboro;
     padding-right: 10px; }
     .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .prev-btn-item, .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .next-btn-item {
       display: inline-block;
