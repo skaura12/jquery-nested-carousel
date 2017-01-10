@@ -102,7 +102,7 @@
             //append navigation buttons
             nestedViewTemplate.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'></a></li> <li><a href='#0' class='next' title='Next'></a></li></ul>");
             nestedViewTemplate.appendTo(self.$ele);
-            flattenedViewTemplate.prepend("<ul class='ns-timeline-navigation'> <li class='prev-btn-item'><a href='#0' class='prev btn-nav-left' title='Previous'></a></li> <li class='next-btn-item'><a href='#0' class='next btn-nav-right' title='Next'></a></li></ul>");
+            flattenedViewTemplate.prepend("<ul class='ns-timeline-navigation'> <li class='prev-btn-item'><span class='glyphicon glyphicon-play-circle prev' aria-hidden='true'></span></li> <li class='next-btn-item'><span class='glyphicon glyphicon-play-circle next' aria-hidden='true'></span></li></ul>");
             flattenedViewTemplate.appendTo(self.$ele);
         },
         _clickInnerNodeHandler:function(target){
@@ -182,7 +182,7 @@
                    }
                 }
             });
-            self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").on("click",function(){
+            self.$flattenedViewContainer.find(".ns-timeline-navigation .glyphicon.prev").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().length){
                     self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().find("a"));
@@ -192,7 +192,7 @@
 
                 }
             });
-            self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").on("click",function(){
+            self.$flattenedViewContainer.find(".ns-timeline-navigation .glyphicon.next").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().length){
                     self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().find("a"));
@@ -289,16 +289,16 @@
         },
         _updateFlattenedViewButtonState: function(){
             var self = this;
-            if(!self.$flattenedViewContainer.find(".outer-node.selected .inner-node.selected").next().length && !self.$flattenedViewContainer.find(".outer-node.selected").next().length){
-                self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").addClass("inactive");
+            if(!self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().length && !self.$nestedViewContainer.find(".outer-node.selected").next().length){
+                self.$flattenedViewContainer.find(".ns-timeline-navigation .glyphicon.next").addClass("inactive");
             }else{
-                self.$flattenedViewContainer.find(".ns-timeline-navigation a.next").removeClass("inactive");
+                self.$flattenedViewContainer.find(".ns-timeline-navigation .glyphicon.next").removeClass("inactive");
             }
 
-            if(!self.$flattenedViewContainer.find(".outer-node.selected .inner-node.selected").prev().length && !self.$flattenedViewContainer.find(".outer-node.selected").prev().length){
-                self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").addClass("inactive");
+            if(!self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().length && !self.$nestedViewContainer.find(".outer-node.selected").prev().length){
+                self.$flattenedViewContainer.find(".ns-timeline-navigation .glyphicon.prev").addClass("inactive");
             }else{
-                self.$flattenedViewContainer.find(".ns-timeline-navigation a.prev").removeClass("inactive");
+                self.$flattenedViewContainer.find(".ns-timeline-navigation .glyphicon.prev").removeClass("inactive");
             }
         },
         changeState: function(nodeData){
