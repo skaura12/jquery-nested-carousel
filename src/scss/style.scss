@@ -238,9 +238,9 @@
       padding-right: 10px;
       .prev-btn-item,.next-btn-item {
         display: inline-block;
-        padding: 10px 7px;
+        padding: 15px 7px;
         .glyphicon {
-          font-size: 30px;
+          font-size: 20px;
           color: #b0b0b0;
           cursor: pointer;
           user-select: none;
@@ -251,8 +251,9 @@
         }
       }
       .prev-btn-item {
-        .glyphicon-play-circle {
+        .glyphicon-play {
           transform: rotate(180deg);
+          top: 2px;
         }
       }
     }

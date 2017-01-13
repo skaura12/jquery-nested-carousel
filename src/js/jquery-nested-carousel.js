@@ -102,7 +102,7 @@
             //append navigation buttons
             nestedViewTemplate.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'></a></li> <li><a href='#0' class='next' title='Next'></a></li></ul>");
             nestedViewTemplate.appendTo(self.$ele);
-            flattenedViewTemplate.prepend("<ul class='ns-timeline-navigation'> <li class='prev-btn-item'><span class='glyphicon glyphicon-play-circle prev' aria-hidden='true'></span></li> <li class='next-btn-item'><span class='glyphicon glyphicon-play-circle next' aria-hidden='true'></span></li></ul>");
+            flattenedViewTemplate.prepend("<ul class='ns-timeline-navigation'> <li class='prev-btn-item'><span class='glyphicon glyphicon-play prev' aria-hidden='true'></span></li> <li class='next-btn-item'><span class='glyphicon glyphicon-play next' aria-hidden='true'></span></li></ul>");
             flattenedViewTemplate.appendTo(self.$ele);
         },
         _clickInnerNodeHandler:function(target){

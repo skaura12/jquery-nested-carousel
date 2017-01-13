@@ -204,17 +204,18 @@
     padding-right: 10px; }
     .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .prev-btn-item, .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .next-btn-item {
       display: inline-block;
-      padding: 10px 7px; }
+      padding: 15px 7px; }
       .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .prev-btn-item .glyphicon, .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .next-btn-item .glyphicon {
-        font-size: 30px;
+        font-size: 20px;
         color: #b0b0b0;
         cursor: pointer;
         user-select: none; }
         .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .prev-btn-item .glyphicon.inactive, .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .next-btn-item .glyphicon.inactive {
           opacity: 0.3;
           cursor: default; }
-    .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .prev-btn-item .glyphicon-play-circle {
-      transform: rotate(180deg); }
+    .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .prev-btn-item .glyphicon-play {
+      transform: rotate(180deg);
+      top: 2px; }
   .ns-horizontal-timeline .flattened-view .flattened-node {
     font-size: 18px;
     line-height: 50px;
