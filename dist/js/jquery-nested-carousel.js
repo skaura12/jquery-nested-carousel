@@ -88,11 +88,11 @@
                 outerNode.list.forEach(function(innerNode){
                     var anchorNode = $("<a href='#0'></a>"),
                         flattenedNode;
-                    anchorNode.data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id);
+                    anchorNode.data("state", innerNode.state).data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id);
                     anchorNode.addClass("state-"+innerNode.state);
-                    $("<li data-toggle='popover' title='Activity Name' data-placement='bottom' class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>").data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id).append(anchorNode).appendTo(innerList);
+                    $("<li data-toggle='popover' title='Activity Name' data-placement='bottom' class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>").data("state", innerNode.state).data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id).append(anchorNode).appendTo(innerList);
                     if(innerNode.selected){
-                        flattenedViewTemplate.find(".flattened-node").text(innerNode.name);
+                        flattenedViewTemplate.find(".flattened-node").text(innerNode.state ? innerNode.name + " - " + innerNode.state : innerNode.name);
                     }
                 });
                 $("<li class='outer-node "+ ((outerNode.selected)?'selected':'') +"' data-id='"+outerNode.id+"' data-name='"+outerNode.name+"'><div class='outer-list-name'><p>"+outerNode.name+"</p></div></li>").append(innerList).appendTo(outerList);
@@ -128,7 +128,8 @@
                     name: self.$ele.find(".nested-view .outer-node.selected").data("name"),
                     nestedNode: {
                         id: self.$ele.find(".nested-view .outer-node.selected .inner-node.selected a").data("id"),
-                        name: self.$ele.find(".nested-view .outer-node.selected .inner-node.selected a").data("content")
+                        name: self.$ele.find(".nested-view .outer-node.selected .inner-node.selected a").data("content"),
+                        state: self.$ele.find(".nested-view .outer-node.selected .inner-node.selected a").data("state")
                     }
                 });
             }
@@ -326,8 +327,16 @@
             $.data(this.$ele, 'plugin_' + pluginName, null);
         },
         selectNode: function(nodeData){
+            debugger;
             var self=this;
-            self._clickInnerNodeHandler(this.$ele.find(".outer-node[data-id = '"+nodeData.id+"'] .inner-node a[data-id = '"+nodeData.nestedNode.id+"']"))
+            var $targetEle;
+            if(nodeData.nestedNode.state){
+                $targetEle = this.$ele.find(".outer-node[data-id = '"+nodeData.id+"'] .inner-node a[data-id = '"+nodeData.nestedNode.id+"'][data-state = '"+nodeData.nestedNode.state+"']");
+            }
+            else{
+                $targetEle = this.$ele.find(".outer-node[data-id = '"+nodeData.id+"'] .inner-node a[data-id = '"+nodeData.nestedNode.id+"']");
+            }
+            self._clickInnerNodeHandler($targetEle);
         }
     };
     $.fn[pluginName] = function(options){
