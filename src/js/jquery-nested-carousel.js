@@ -88,9 +88,9 @@
                 outerNode.list.forEach(function(innerNode){
                     var anchorNode = $("<a href='#0'></a>"),
                         flattenedNode;
-                    anchorNode.data("state", innerNode.state).data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id);
+                    anchorNode.attr("data-state", innerNode.state?innerNode.state:"").data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id);
                     anchorNode.addClass("state-"+innerNode.state);
-                    $("<li data-toggle='popover' title='Activity Name' data-placement='bottom' class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>").data("state", innerNode.state).data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id).append(anchorNode).appendTo(innerList);
+                    $("<li data-toggle='popover' title='Activity Name' data-placement='bottom' class='inner-node "+((innerNode.selected)?'selected':'')+"'></li>").data("state", innerNode.state?innerNode.state:"").data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id).append(anchorNode).appendTo(innerList);
                     if(innerNode.selected){
                         flattenedViewTemplate.find(".flattened-node").text(innerNode.state ? innerNode.name + " - " + innerNode.state : innerNode.name);
                     }
