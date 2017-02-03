@@ -327,15 +327,16 @@
             $.data(this.$ele, 'plugin_' + pluginName, null);
         },
         selectNode: function(nodeData){
-            debugger;
             var self=this;
             var $targetEle;
             if(nodeData.nestedNode.state){
                 $targetEle = this.$ele.find(".outer-node[data-id = '"+nodeData.id+"'] .inner-node a[data-id = '"+nodeData.nestedNode.id+"'][data-state = '"+nodeData.nestedNode.state+"']");
             }
-            else{
+
+            if(!($targetEle && $targetEle.length > 0)){
                 $targetEle = this.$ele.find(".outer-node[data-id = '"+nodeData.id+"'] .inner-node a[data-id = '"+nodeData.nestedNode.id+"']");
             }
+
             self._clickInnerNodeHandler($targetEle);
         }
     };
