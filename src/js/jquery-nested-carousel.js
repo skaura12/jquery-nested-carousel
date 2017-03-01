@@ -86,7 +86,7 @@
                 var innerList = $("<ul class='inner-nodes-container'></ul>");
 
                 outerNode.list.forEach(function(innerNode){
-                    var anchorNode = $("<a href='#0'></a>"),
+                    var anchorNode = $("<a href='javascript:void(0)'></a>"),
                         flattenedNode;
                     anchorNode.attr("data-state", innerNode.state?innerNode.state:"").data("content", (innerNode.name)?(innerNode.name):(outerNode.name)?(outerNode.name):"").attr("data-id", innerNode.id);
                     anchorNode.addClass("state-"+innerNode.state);
@@ -100,7 +100,7 @@
 
             nestedViewTemplate.find(".list").append(outerList);
             //append navigation buttons
-            nestedViewTemplate.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='#0' class='prev' title='Previous'></a></li> <li><a href='#0' class='next' title='Next'></a></li></ul>");
+            nestedViewTemplate.find(".timeline").append("<ul class='ns-timeline-navigation'> <li><a href='javascript:void(0)' class='prev' title='Previous'></a></li> <li><a href='javascript:void(0)' class='next' title='Next'></a></li></ul>");
             nestedViewTemplate.appendTo(self.$ele);
             flattenedViewTemplate.prepend("<ul class='ns-timeline-navigation'> <li class='prev-btn-item'><span class='glyphicon glyphicon-play prev' aria-hidden='true'></span></li> <li class='next-btn-item'><span class='glyphicon glyphicon-play next' aria-hidden='true'></span></li></ul>");
             flattenedViewTemplate.appendTo(self.$ele);
