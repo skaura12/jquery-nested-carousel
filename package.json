@@ -1,6 +1,6 @@
 {
   "name": "jquery-nested-carousel",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "nested timeline that takes 2 level nested json structure and provides a ui that allows switching between different levels effectively",
   "main": "main.js",
   "scripts": {
