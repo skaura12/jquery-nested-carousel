@@ -105,7 +105,7 @@
             flattenedViewTemplate.prepend("<ul class='ns-timeline-navigation'> <li class='prev-btn-item'><span class='glyphicon glyphicon-play prev' aria-hidden='true'></span></li> <li class='next-btn-item'><span class='glyphicon glyphicon-play next' aria-hidden='true'></span></li></ul>");
             flattenedViewTemplate.appendTo(self.$ele);
         },
-        _clickInnerNodeHandler:function(target){
+        _clickInnerNodeHandler:function(target,callNodeSwitchCallback){
             var self=this;
             var innerSelectedName;
             var wrapperListItem = target.closest(".outer-node"),innerNodeName;
@@ -122,7 +122,7 @@
 
             innerNodeName = target.data("content");
             target.parent().addClass("selected");
-            if(typeof self.options.nodeSwitchCallback === "function") {
+            if(typeof self.options.nodeSwitchCallback === "function" && callNodeSwitchCallback) {
                 self.options.nodeSwitchCallback({
                     id: self.$ele.find(".nested-view .outer-node.selected").data("id"),
                     name: self.$ele.find(".nested-view .outer-node.selected").data("name"),
@@ -175,31 +175,31 @@
                 isDragging = false;
                 if (!wasDragging) {
                    if($(event.target).parent().hasClass("inner-node")){
-                    self._clickInnerNodeHandler($(event.target));
+                    self._clickInnerNodeHandler($(event.target),true);
                     }    
                    else
                    {
-                    self._clickInnerNodeHandler($($(event.currentTarget).find(".inner-node a")[0]));
+                    self._clickInnerNodeHandler($($(event.currentTarget).find(".inner-node a")[0]),true);
                    }
                 }
             });
             self.$flattenedViewContainer.find(".ns-timeline-navigation .glyphicon.prev").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().length){
-                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().find("a"));
+                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").prev().find("a"),true);
 
                 }else if(self.$nestedViewContainer.find(".outer-node.selected").prev().length){
-                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected").prev().find(".inner-node").last().find("a"));
+                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected").prev().find(".inner-node").last().find("a"),true);
 
                 }
             });
             self.$flattenedViewContainer.find(".ns-timeline-navigation .glyphicon.next").on("click",function(){
                 event.preventDefault();
                 if(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().length){
-                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().find("a"));
+                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected .inner-node.selected").next().find("a"),true);
 
                 }else if(self.$nestedViewContainer.find(".outer-node.selected").next().length){
-                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected").next().find(".inner-node").first().find("a"));
+                    self._clickInnerNodeHandler(self.$nestedViewContainer.find(".outer-node.selected").next().find(".inner-node").first().find("a"),true);
                 }
             });
             self._efficientDragging=debounce(250);
@@ -326,7 +326,7 @@
             this.$ele.empty();
             $.data(this.$ele, 'plugin_' + pluginName, null);
         },
-        selectNode: function(nodeData){
+        selectNode: function(nodeData,callNodeSwitchCallback){
             var self=this;
             var $targetEle;
             if(nodeData.nestedNode.state){
@@ -337,7 +337,7 @@
                 $targetEle = this.$ele.find(".outer-node[data-id = '"+nodeData.id+"'] .inner-node a[data-id = '"+nodeData.nestedNode.id+"']");
             }
 
-            self._clickInnerNodeHandler($targetEle);
+            self._clickInnerNodeHandler($targetEle,callNodeSwitchCallback);
         }
     };
     $.fn[pluginName] = function(options){
