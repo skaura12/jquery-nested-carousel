@@ -26,9 +26,6 @@
   ol, ul {
     list-style: none;
   }
-  .hidden {
-    visibility: hidden;
-  }
   .timeline {
     position: relative;
     font-size: 12px;
@@ -232,13 +229,15 @@
     height: 50px;
     position: relative;
     .ns-timeline-navigation {
-      position: absolute;
+      display: table;
+      float: left;
       height: 50px;
       border-right: 1px solid rgb(220, 220, 220);
       padding-right: 10px;
       .prev-btn-item,.next-btn-item {
-        display: inline-block;
-        padding: 15px 7px;
+        display: table-cell;
+        padding: 0 7px;
+        vertical-align: middle;
         .glyphicon {
           font-size: 20px;
           color: #b0b0b0;
@@ -264,7 +263,6 @@
       white-space: nowrap;
       overflow: hidden;
       padding: 0 30px;
-      margin-left: 105px;
     }
   }
 }

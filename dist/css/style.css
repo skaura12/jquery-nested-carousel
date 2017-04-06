@@ -10,9 +10,6 @@
 .ns-horizontal-timeline ol, .ns-horizontal-timeline ul {
   list-style: none; }
 
-.ns-horizontal-timeline .hidden {
-  visibility: hidden; }
-
 .ns-horizontal-timeline .timeline {
   position: relative;
   font-size: 12px;
@@ -198,13 +195,15 @@
   height: 50px;
   position: relative; }
   .ns-horizontal-timeline .flattened-view .ns-timeline-navigation {
-    position: absolute;
+    display: table;
+    float: left;
     height: 50px;
     border-right: 1px solid gainsboro;
     padding-right: 10px; }
     .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .prev-btn-item, .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .next-btn-item {
-      display: inline-block;
-      padding: 15px 7px; }
+      display: table-cell;
+      padding: 0 7px;
+      vertical-align: middle; }
       .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .prev-btn-item .glyphicon, .ns-horizontal-timeline .flattened-view .ns-timeline-navigation .next-btn-item .glyphicon {
         font-size: 20px;
         color: #b0b0b0;
@@ -222,8 +221,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    padding: 0 30px;
-    margin-left: 105px; }
+    padding: 0 30px; }
 
 .nested-node-popover.popover {
   font-size: 12px;
