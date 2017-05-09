@@ -322,10 +322,6 @@
             self.rightEdge= self.containerWidth-(self.containerWidth/2+self.$nestedViewContainer.find("ol > li.outer-node").outerWidth()/2+self.nodeMargin/2)+self.$nestedViewContainer.find(".list").offset().left;
             self.$nestedViewContainer.find(".list ol.outer-nodes-container").draggable( "option", "containment", [self.leftEdge,0,self.rightEdge,0]);
         },
-        destroy: function(){
-            this.$ele.empty();
-            $.data(this.$ele, 'plugin_' + pluginName, null);
-        },
         selectNode: function(nodeData,callNodeSwitchCallback){
             var self=this;
             var $targetEle;
@@ -357,6 +353,11 @@
 
                 if (instance instanceof Plugin && typeof instance[options] === 'function') {
                     returns = instance[options].apply( instance, Array.prototype.slice.call( args, 1 ) );
+                }
+                // Allow instances to be destroyed via the 'destroy' method
+                if (options === 'destroy') {
+                    $(this).empty();
+                    $.data(this, 'plugin_' + pluginName, null);
                 }
             });
 
